@@ -1,0 +1,102 @@
+This document describes how to use command line arguments 
+and how to compile C programs from the command line.
+
+
+How to Use Command Line Arguments
+
+In C, you can pass input to a program from the command line. 
+Notice that every C program has a main function. 
+In a lot of cases, main doesn’t take arguments and instead is void. 
+But it sometimes useful for main to have arguments, 
+in this case, the function declaration changes to:
+
+    int main(int argc, char **argv)
+
+argc is the number of arguments, or the size of argv. 
+argv holds all of the arguments given when you run the program, 
+including the program name itself, for example ./a.out or ./compiler
+
+If you ran the following line:
+
+$./a.out input.txt output.txt
+
+Then argc = 3, and argv = {“./a.out”, “input.txt”, “output.txt”}
+
+
+How to Compile C Programs from the Command Line
+
+If your machine is MacOS or Linux, then all you need to do is make 
+sure that gcc is installed and then navigate in the terminal to the 
+file holding your program and any input files and then run the following 
+lines:
+
+    $gcc program.c
+    $./a.out
+
+If you’d like to rename the executable (a.out), do the following:
+    
+    $gcc program.c -o program
+    $./program
+
+If your machine is Windows, there are a few options. The one I use is a 
+linux bash shell. This is a linux terminal that allows you to navigate 
+your file system and use linux based software. Here’s a link to help you 
+get it set up.
+
+https://www.howtogeek.com/249966/how-to-install-and-use-the-linux-bash-shell-on-windows-10/
+
+
+How to Implement Compiler Directives for HW3
+
+In HW3 there are 3 compiler directives. Your program should support any 
+combination, in any order. All they do is indicate what should print to 
+the screen.
+
+    -1 to print the lexeme list (HW2)
+    -a to print the generated assembly code
+    -v to print the virtual machine execution (HW1)
+
+Your program should read the input, generate a lexeme list, parse the list 
+for syntactical errors, and then run the resulting code through the virtual 
+machine from HW1. It should print everything (the input, the lexeme table, 
+the lexeme list, the generated code, and the virtual machine execution) to 
+a file. Then based on the directives given, your machine should print the 
+requested output to the screen/console/terminal. If at any point, your program 
+encounters any sort of error, it should print the error to the screen and stop 
+immediately.
+
+To implement this, here are my recommendations. Note that I assume you’re 
+taking the input file name as an argument from the command line. This isn’t 
+required, I definitely prefer it, but I won’t mark you down if your program 
+reads from a specific input file name. So here is an example line of input:
+
+    $./a.out input.txt -v -l
+
+I recommend using three flagsFirst look at argc, if it equals 2 then there 
+are no directives, 3 for one directive, 4 for two directives, and 5 for three 
+directives. Then for each directive compare the second index to ‘v’, ‘a’, and 
+‘l’. If they match, set that flag to 1. If argc == 5, then all the directives 
+have been used and you can just set all the flags to 1. We will never give you 
+repeated directives, or false directives like -m.
+
+Pseudocode:
+
+aFlag, vFlag, lFlag = false
+
+if (argc == 5)
+    aFlag, vFlag, lFlag = true
+else if (argc != 2)
+    if (argv[2][1] == ‘v’)
+        vFlag = true
+    else if (argv[2][1] == ‘a’)
+        aFlag = true
+    else 
+        lFlag = true
+
+    if (argc == 4)
+        if (argv[3][1] == ‘v’)
+            vFlag = true
+        else if (argv[3][1] == ‘a’)
+            aFlag = true
+        else 
+            lFlag = true

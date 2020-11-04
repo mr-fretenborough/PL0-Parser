@@ -1,0 +1,50 @@
+Noelle's Tips for Debugging
+
+Start by fixing all compile time errors first. These are easy because
+your compiler will tell you what the errors are.
+
+There are generally two types of runtime errors: segmentation faults
+and logical errors.
+
+The vast majority of the time, seg faults are caused by invalid array
+accesses. When you try to access an array with an invalid index like
+a negative or a value greater than the array length. 
+
+The first part of finding the point of error is print statements. In 
+your main function, separate major function calls with print statements 
+so you can identify which function is causing the problem. Work through 
+large sections of code to find the line with the error. I like to label 
+my prints with the line number where the print statement is, for example 
+if I print "error 17", but I don't print "error 32", then I know that 
+the error occurs between those lines.
+
+Once you know where the error is, you have to figure out what value is 
+incorrect and why. Make sure to print out your variables so you can 
+confirm that they're right. You might have to traceback a variable to 
+find when it changed to the wrong value.
+
+A lot of problems I see with C programs involve pointers and dynamic
+memory allocation. I find that it's better to dynamically allocate 
+struct arrays. Remember to include () when dereferencing a pointer to
+change its value. Remember to allocate variables before using them.
+Remember that you have to allocate a string variable before you can use
+strcpy to add a string to it.
+
+If your problem is a logical error, trace through it. Use a .txt or a 
+pen and paper and write out the variables and their values. This can
+take a lot of time depending on the program but it's really helpful.
+
+In the case of HW4, check the input of each section to identify which 
+one causes the error. Check that your lexical analyzer is producing the
+correct lexeme list, check that your parser is producing the correct
+symbol table, and check that your code generator is producing the 
+correct code.
+
+Finally, file I/O can get messy and complicated. Avoid writing your 
+output to files and reading it in again for the next section, just 
+pass an array of structs instead.
+
+P.S. please avoid using non-standard C functions like itoa, they may
+cause compile time errors.
+
+P.S.S. use variable names that make sense and comment liberally
