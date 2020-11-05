@@ -20,5 +20,6 @@ int  containsLetter(char *string);
 void printLexemeTable(lexeme *list, int size);
 void printLexemeList(lexeme *list, int size);
 int isValidSpecial(char c);
+void printSymbols(lexeme *list, int size);
 
 #endif

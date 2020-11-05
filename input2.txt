@@ -1,0 +1,2 @@
+ ident 35 + - * / odd = <> < <= > >= ( ) , ; . := begin end if then while do
+call const var procedure write read else

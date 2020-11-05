@@ -24,10 +24,15 @@ lexeme* lex_analyze(FILE *ifp, int *listCount)
 					}
 					// if the string is a key word then add to lexeme list as key word
 					// otherwise check to see if valid ident
-					if (!isKeyWord(tempString, list, listCount) && isIdentifierValid(tempString, list, listCount)) {
-							strcpy(list[*listCount].lexeme, tempString);
-							list[*listCount].tokenType = 2;
-							(*listCount)++;
+					if (!isKeyWord(tempString, list, listCount)) {
+							if (isIdentifierValid(tempString, list, listCount)) {
+									strcpy(list[*listCount].lexeme, tempString);
+									list[*listCount].tokenType = 2;
+									(*listCount)++;
+							} else {
+									return NULL;
+							}
+
 					}
 			// check if digit
 			} else if (isdigit(c)) {
@@ -44,6 +49,8 @@ lexeme* lex_analyze(FILE *ifp, int *listCount)
 							list[*listCount].tokenType = 3;
 							(*listCount)++;
 					}
+					else
+							return NULL;
 			// if space, skip
 			} else if (isspace(c)) {
 					c = fgetc(ifp);
@@ -178,18 +185,22 @@ lexeme* lex_analyze(FILE *ifp, int *listCount)
 											(*listCount)++;
 											c = fgetc(ifp);
 									} else {
-											list[*listCount].tokenType = -4;
-											strcpy(list[*listCount].lexeme, ":");
-											(*listCount)++;
+											// list[*listCount].tokenType = -4;
+											// strcpy(list[*listCount].lexeme, ":");
+											// (*listCount)++;
+											printf("ERROR: invalid symbol \"%s\"\n", ":");
+											return NULL;
 									}
 									break;
 							// default case for any symbol not in our language
 							default:
-									list[*listCount].tokenType = -4;
-									list[*listCount].lexeme[0] = c;
-									list[*listCount].lexeme[1] = '\0';
-									(*listCount)++;
-									c = fgetc(ifp);
+									// list[*listCount].tokenType = -4;
+									// list[*listCount].lexeme[0] = c;
+									// list[*listCount].lexeme[1] = '\0';
+									// (*listCount)++;
+									// c = fgetc(ifp);
+									printf("ERROR: invalid symbol \"%c\"\n", c);
+									return NULL;
 					}
 			}
 
@@ -214,9 +225,10 @@ void printFile(FILE *ifp)
 int  isIdentifierValid(char *string, lexeme *list, int *counter)
 {
     if (strlen(string) > 11) {
-        strcpy(list[*counter].lexeme, string);
-        list[*counter].tokenType = -1;
-        (*counter)++;
+        // strcpy(list[*counter].lexeme, string);
+        // list[*counter].tokenType = -1;
+        // (*counter)++;
+				printf("ERROR: identifier \"%s\" is too long.\n", string);
         return 0;
     }
     return 1;
@@ -305,16 +317,18 @@ int isNumberValid(char *string, lexeme *list, int *count)
 
     if (flag)
     {
-      list[*count].tokenType = -3;
-      strcpy(list[*count].lexeme, string);
-      (*count)++;
+      // list[*count].tokenType = -3;
+      // strcpy(list[*count].lexeme, string);
+      // (*count)++;
+			printf("ERROR: identifier \"%s\" does not start with a letter\n", string);
       return 0;
     }
     else
     {
-      list[*count].tokenType = -2;
-      strcpy(list[*count].lexeme, string);
-      (*count)++;
+      // list[*count].tokenType = -2;
+      // strcpy(list[*count].lexeme, string);
+      // (*count)++;
+			printf("ERROR: number \"%s\" is too long\n", string);
       return 0;
     }
   }
@@ -370,3 +384,112 @@ void printLexemeList(lexeme *list, int size)
     printf("\n\n");
 }
 //------------------------------------------------------------------------------
+void printSymbols(lexeme *list, int size)
+{
+	int i;
+
+	printf("Symbolic Representation:\n");
+	for (i = 0; i < size; i++)
+	{
+		switch (list[i].tokenType)
+		{
+			case 2:
+				printf("| identsym %s ", list[i].lexeme);
+				break;
+			case 3:
+				printf("| numbersym %s ", list[i].lexeme);
+				break;
+			case 4:
+				printf("| plussym ");
+				break;
+			case 5:
+				printf("| minussym ");
+				break;
+			case 6:
+				printf("| multsym ");
+				break;
+			case 7:
+				printf("| slashsym ");
+				break;
+			case 8:
+				printf("| oddsym ");
+				break;
+			case 9:
+				printf("| eqlsym ");
+				break;
+			case 10:
+				printf("| neqsym ");
+				break;
+			case 11:
+				printf("| lessym ");
+				break;
+			case 12:
+				printf("| leqsym ");
+				break;
+			case 13:
+				printf("| gtrsym ");
+				break;
+			case 14:
+				printf("| geqsym ");
+				break;
+			case 15:
+				printf("| lparentsym ");
+				break;
+			case 16:
+				printf("| rparentsym ");
+				break;
+			case 17:
+				printf("| commasym ");
+				break;
+			case 18:
+				printf("| semicolonsym ");
+				break;
+			case 19:
+				printf("| periodsym ");
+				break;
+			case 20:
+				printf("| becomessym ");
+				break;
+			case 21:
+				printf("| beginsym ");
+				break;
+			case 22:
+				printf("| endsym ");
+				break;
+			case 23:
+				printf("| ifsym ");
+				break;
+			case 24:
+				printf("| thensym ");
+				break;
+			case 25:
+				printf("| whilesym ");
+				break;
+			case 26:
+				printf("| dosym ");
+				break;
+			case 27:
+				printf("| callsym ");
+				break;
+			case 28:
+				printf("| constym ");
+				break;
+			case 29:
+				printf("| varsym ");
+				break;
+			case 30:
+				printf("| procsym ");
+				break;
+			case 31:
+				printf("| writesym ");
+				break;
+			case 32:
+				printf("| readsym ");
+				break;
+			case 33:
+				printf("| elsesym ");
+				break;
+		}
+	}
+	printf("\n");
+}

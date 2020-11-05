@@ -12,6 +12,13 @@
  * move the vm over into its own file
 */
 
+/* ERROR List
+ * when the identifier is too long
+ * when the number is too long
+ * when an identifier starts with a containsLetter
+ * when the sysmbol isnt in out language
+*/
+
 int main(int argc, char **argv)
 {
 	int lFlag = 0, aFlag = 0, vFlag = 0;
@@ -46,10 +53,21 @@ int main(int argc, char **argv)
 	}
 
 	lexeme *list = lex_analyze(ifp, &lexemeListSize);
+	if (list == NULL)
+	{
+		printf("\nError detected in scanner, exiting...\n");
+		return 0;
+	}
+
 	if (lFlag)
+	{
 		printLexemeList(list, lexemeListSize);
+		printSymbols(list, lexemeListSize);
+	}
 
 	
+
+
 /*
 	symbol *table = parse(list);
 	instruction *code = generate_code(table, list);
