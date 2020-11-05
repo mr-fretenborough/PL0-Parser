@@ -72,10 +72,10 @@ int main(int argc, char **argv)
 
 	symbol *table = parse(list, lexemeListSize, &symbolTableSize);
 
-// 	for (i = 0; i < 2; i++)
-// 	{
-	// 	printf("KIND:: %d\nNAME:: %s\n\n", table[1].kind, table[1].name);
-// 	}
+	for (i = 0; i < 2; i++)
+ 	{
+		printf("KIND:: %d\nNAME:: %s\n\n", table[i].kind, table[i].name);
+	}
 
 /*
 	instruction *code = generate_code(table, list);

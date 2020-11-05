@@ -46,7 +46,7 @@ void program(lexeme *list, symbol *table) {
 	if (cToken > size || strcmp(list[cToken].lexeme, ".") != 0) {
 		errorFlag = 1;
 		printf("Error number 9, period expected\n");
-		exit(0);
+		// exit(0);
 	}
 }
 
@@ -59,7 +59,7 @@ void block(lexeme *list, symbol *table) {
 }
 
 void constDeclaration(lexeme *list, symbol *table) {
-	char *string = NULL;
+	char string[12] = {""};
 
 	if (list[cToken].tokenType == 28) {
 		do {
