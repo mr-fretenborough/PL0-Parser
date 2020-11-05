@@ -4,7 +4,7 @@
 #include <string.h>
 #include <ctype.h>
 
-lexeme* lex_analyze(FILE *ifp, int *listCount)
+lexeme* lexAnalyze(FILE *ifp, int *listCount)
 {
 	lexeme *list = malloc(sizeof(lexeme) * 1000);
 	char tempString[100] = {""}, c;

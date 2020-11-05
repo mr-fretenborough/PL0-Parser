@@ -24,6 +24,7 @@ int main(int argc, char **argv)
 	int lFlag = 0, aFlag = 0, vFlag = 0;
 	int i;
 	int lexemeListSize = 0;
+	int symbolTableSize = 0;
 
 	if (argc < 2)
 		printf("error : please include the file name\n");
@@ -52,7 +53,7 @@ int main(int argc, char **argv)
 		}
 	}
 
-	lexeme *list = lex_analyze(ifp, &lexemeListSize);
+	lexeme *list = lexAnalyze(ifp, &lexemeListSize);
 	if (list == NULL)
 	{
 		printf("\nError detected in scanner, exiting...\n");
@@ -65,11 +66,18 @@ int main(int argc, char **argv)
 		printSymbols(list, lexemeListSize);
 	}
 
-	
 
+
+
+
+	symbol *table = parse(list, lexemeListSize, &symbolTableSize);
+
+// 	for (i = 0; i < 2; i++)
+// 	{
+	// 	printf("KIND:: %d\nNAME:: %s\n\n", table[1].kind, table[1].name);
+// 	}
 
 /*
-	symbol *table = parse(list);
 	instruction *code = generate_code(table, list);
 	virtual_machine(code);
 */

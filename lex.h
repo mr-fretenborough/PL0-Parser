@@ -10,7 +10,7 @@ typedef struct lexeme {
     int tokenType;
 } lexeme;
 
-lexeme* lex_analyze(FILE *ifp, int *listCount);
+lexeme* lexAnalyze(FILE *ifp, int *listCount);
 void printFile(FILE *ifp);
 int  isIdentifierValid(char *string, lexeme *list, int *counter);
 int  isKeyWord(char *string, lexeme *list, int *counter);

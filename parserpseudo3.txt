@@ -1,6 +1,6 @@
 // this was written by TA Noelle without direction or suggestion from
 // Professor Montagne, it is entirely possible that it contains errors
-// if you find an error or you have any questions, please email me at 
+// if you find an error or you have any questions, please email me at
 // noellemidkiff@knights.ucf.edu
 
 PROGRAM
@@ -13,11 +13,11 @@ BLOCK
 	VAR-DECLARATION
 	STATEMENT
 
-CONST-DECLARATION 
+CONST-DECLARATION
 	if token == const
 		do
-			get next token
-			if token != ident
+			i++
+			if cToken > listSize || token != ident
 				error
 			save ident name
 			if the ident name is already in the symbol table
@@ -27,7 +27,7 @@ CONST-DECLARATION
 				error
 			get next token
 			if token != number
-				error
+				errors
 			add to the symbol table (kind 1, saved name, number is current token, lexlevel 0, m 0, unmarked)
 			get next token
 		while token == ,
@@ -45,13 +45,13 @@ VAR-DECLARATION
 				error
 			if ident is already in the symbol table
 				error
-			add to symbol table (kind 2, name is current token, val 0, lexlevel 0, m var# + 2, unmarked)
+			add to symbol table (kind 2, name is current token, val 0, lexlevel 0, m = var# + 2, unmarked)
 			get next token
 		while token == ,
 		if token != ;
 			error
 		get next token
-		
+
 STATEMENT
 	if token == ident
 		if ident is not in the symbol table at all
@@ -109,7 +109,7 @@ STATEMENT
 		get next token
 		return
 	return
-	
+
 CONDITION
 	if token == odd
 		get next token
@@ -120,7 +120,7 @@ CONDITION
 			error
 		get next token
 		EXPRESSION
-		
+
 EXPRESSION
 	if token == + -
 		get next token
