@@ -472,7 +472,7 @@ void printSymbols(lexeme *list, int size)
 				printf("| callsym ");
 				break;
 			case 28:
-				printf("| constym ");
+				printf("| constsym ");
 				break;
 			case 29:
 				printf("| varsym ");
