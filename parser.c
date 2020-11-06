@@ -279,12 +279,12 @@ void condition(lexeme *list, symbol *table) {
 	} else {
 		expression(list, table);
 		// if token is not a comparison, raise error
-		if (list[cToken].tokenType != 9		// "="
-		 || list[cToken].tokenType != 10	// "<>"
-		 || list[cToken].tokenType != 11	// "<"
-		 || list[cToken].tokenType != 12	// "<="
-		 || list[cToken].tokenType != 13	// ">"
-		 || list[cToken].tokenType != 14) {	// ">="
+		if (list[cToken].tokenType == 9		// "="
+		 || list[cToken].tokenType == 10	// "<>"
+		 || list[cToken].tokenType == 11	// "<"
+		 || list[cToken].tokenType == 12	// "<="
+		 || list[cToken].tokenType == 13	// ">"
+		 || list[cToken].tokenType == 14) {	// ">="
 			 printf("damn dis do be a error");
 			 exit(0);
 		 } // figure out these codes
