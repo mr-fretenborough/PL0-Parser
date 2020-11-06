@@ -17,6 +17,16 @@
 18: semicolonsym    ;
 19: periodsym       .
 20: becomesym       :=
-21: beginsym
-22
-23
+21: beginsym        begin
+22: endsym          end
+23: ifsym           if
+24: thensym         then
+25: whilewym        while
+26: dosym           do
+27: callsym
+28: constsym
+29: varsym          xxx
+30: procsym
+31: writesym
+32: readsym
+33: elsesym
