@@ -71,7 +71,7 @@ void constDeclaration(lexeme *list, symbol *table) {
 
 			strcpy(string, list[cToken].lexeme);
 
-			checkIdent(list[cToken].lexeme, table);
+			checkIdent(list[cToken].lexeme, table); // i updated checkIdent to return a value
 
 			cToken++;
 
