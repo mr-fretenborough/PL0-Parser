@@ -25,7 +25,7 @@
 26: dosym           do
 27: callsym
 28: constsym
-29: varsym          xxx
+29: varsym
 30: procsym
 31: writesym
 32: readsym
