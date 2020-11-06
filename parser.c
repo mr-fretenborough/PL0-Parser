@@ -153,7 +153,6 @@ int checkIdent(char* search, symbol* table) {
 	return 0;
 }
 
-/*
 void statement(lexeme *list, symbol *table) {
 	if (list[cToken].tokenType == 2) {
 
@@ -163,7 +162,24 @@ void statement(lexeme *list, symbol *table) {
 }
 
 void condition(lexeme *list, symbol *table) {
-
+	if (1) { // figure out wtf "odd" means
+		cToken++;
+		expression(list, table);
+	} else {
+		expression(list, table);
+		// if token is not a comparison, raise error
+		if (list[cToken].tokenType != 9		// "="
+		 || list[cToken].tokenType != 10	// "<>"
+		 || list[cToken].tokenType != 11	// "<"
+		 || list[cToken].tokenType != 12	// "<="
+		 || list[cToken].tokenType != 13	// ">"
+		 || list[cToken].tokenType != 14) {	// ">="
+			 printf("damn dis do be a error");
+			 exit(0);
+		 } // figure out these codes
+		 cToken++;
+		 expression(list, table);
+	}
 }
 
 void expression(lexeme *list, symbol *table) {
@@ -177,4 +193,3 @@ void term(lexeme *list, symbol *table) {
 void factor(lexeme *list, symbol *table) {
 
 }
-*/
