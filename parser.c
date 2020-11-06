@@ -118,7 +118,7 @@ void varDeclaration(lexeme *list, symbol *table) {
 				printf("some mf errors bitch");
 				exit(0);
 			// if following token is not a duplicate
-			} else if (checkIdent(list[cToken].lexeme, table)) {
+			} else if (!checkIdent(list[cToken].lexeme, table)) {
 				// populate a new table entry
 				table[symbolIndex].kind = 1;
 				strcpy(table[symbolIndex].name, list[cToken].lexeme);
@@ -128,6 +128,10 @@ void varDeclaration(lexeme *list, symbol *table) {
 				table[symbolIndex].mark = 0;
 				// increment table index
 				symbolIndex++;
+			} else if (checkIdent(list[cToken].lexeme, table)) {
+				// there is a duplicate value, print error and exit
+				printf("damn bud issa error");
+				exit(0);
 			}
 			// continue if next token is a ","
 		} while (list[cToken++].tokenType == 17);
@@ -145,11 +149,11 @@ int checkIdent(char* search, symbol* table) {
 	// check to see if ident is already in the table
 	for (int i = 0; i < symbolIndex; i++) {
 		if (strcmp(search, table[symbolIndex].name) == 0) {
-			// there is a duplicate value, print error and exit
-			printf("damn bud issa error");
-			exit(0);
+			// there is a duplicate value, return true (1)
+			return 1;
 		}
 	}
+	// no duplicates, return false (0)
 	return 0;
 }
 
@@ -183,13 +187,51 @@ void condition(lexeme *list, symbol *table) {
 }
 
 void expression(lexeme *list, symbol *table) {
-
+	// if token is "+" or "-", get next and process
+	if (list[cToken].tokenType == 4 || list[cToken].tokenType == 5) {
+		cToken++;
+	}
+	term(list, table);
+	// while token is "+" or "-", get next and process
+	while (list[cToken].tokenType == 4 || list[cToken].tokenType == 5) {
+		cToken++;
+		term(list, table);
+	}
 }
 
 void term(lexeme *list, symbol *table) {
-
+	factor(list, table);
+	// while token is "*" or "/", process
+	while (list[cToken].tokenType == 6 || list[cToken].tokenType == 7) {
+		cToken++;
+		factor(list, table);
+	}
 }
 
 void factor(lexeme *list, symbol *table) {
-
+	// if token is an identifier
+	if (list[cToken].tokenType == 2) {
+		// if the ID is not in the table, raise error
+		if (!checkIdent(list[cToken].lexeme, table)) {
+			printf("dude got sum errors");
+			exit(0);
+		}
+		cToken++;
+	// if token is a number, get next
+	} else if (list[cToken].tokenType == 3) {
+		cToken++;
+	// if token is a "(", process
+	} else if (list[cToken].tokenType == 15) {
+		cToken++;
+		expression(list, table);
+		// if token is not ")", raise error
+		if (list[cToken].tokenType != 16) {
+			printf("fuck off ya error");
+			exit(0);
+		}
+		cToken++;
+	} else {
+		printf("god damn w the errors");
+		exit(0);
+	}
 }
