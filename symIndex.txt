@@ -1,0 +1,22 @@
+2:  identsym        ident
+3:  numbersym       number
+4:  plussym         +
+5:  minussym        -
+6:  multsym         *
+7:  slashsym        /
+8:  oddsym
+9:  eqlsym          =
+10: neqsym          !=
+11: lesssym         <
+12: leqsym          <=
+13: gtrsym          >
+14: geqsym          >=
+15: lparentsym      (
+16: rparentsym      )
+17: commasym        ,
+18: semicolonsym    ;
+19: periodsym       .
+20: becomesym       :=
+21: beginsym
+22
+23
