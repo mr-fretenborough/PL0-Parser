@@ -7,7 +7,7 @@
 
 // init error flag, lex size, and current token
 int errorFlag = 0;
-int size, cToken, symbolIndex;
+int size, cToken, iSymbol;
 
 // basic functions
 symbol* parse(lexeme *list, int size, int *symbolTableSize);
@@ -26,18 +26,18 @@ int checkIdent(char* search, symbol* table);
 
 symbol* parse(lexeme *list, int inputSize, int *symbolTableSize)
 {
-	// init symbol table and current token
+	// init symbol table, current token, list length, and symIndex
 	symbol *table = malloc(MAX_SYMBOL_TABLE_SIZE * sizeof(symbol));
 	cToken = 0;
 	size = inputSize;
-	symbolIndex = 0;
+	iSymbol = 0;
 
 	program(list, table);
 
-	// if there are no erros, print the success message
+	// if there are no errors, print the success message
 	if (!errorFlag)
-		printf("symbols are parsed\n");
-	*symbolTableSize = symbolIndex;
+		printf("COMPLETED: Symbols have been parsed\n");
+	*symbolTableSize = iSymbol;
 	return table;
 }
 
@@ -45,19 +45,19 @@ void program(lexeme *list, symbol *table) {
 	block(list, table);
 	if (cToken > size || list[cToken].tokenType == 19) {
 		errorFlag = 1;
-		printf("Error number 9, period expected\n");
-		// exit(0);
+		printf("ERROR 9: Period expected\n");
+		exit(0);
 	}
 }
 
 void block(lexeme *list, symbol *table) {
 	// iterate through the list, looking for const, var, and stmts
-	// reset the cToken after each iteration, return to beginning
 	constDeclaration(list, table);
 	varDeclaration(list, table);
-	// statement(list, table);
+	statement(list, table);
 }
 
+// handles constant declaration error detection
 void constDeclaration(lexeme *list, symbol *table) {
 	char string[12] = {""};
 
@@ -65,40 +65,40 @@ void constDeclaration(lexeme *list, symbol *table) {
 		do {
 			cToken++;
 			if (cToken > size || list[cToken].tokenType != 2) {
-				printf("NEED AN IDENTIFIER\n");
+				printf("ERROR XX: Need an identifier\n");
 				exit(0);
 			}
 
 			strcpy(string, list[cToken].lexeme);
-
+///////////////////////////////////////////////////
 			checkIdent(list[cToken].lexeme, table); // i updated checkIdent to return a value
-
+///////////////////////////////////////////////////
 			cToken++;
 
 			if (cToken > size || list[cToken].tokenType != 9) {
-				printf("NEED AN =\n");
+				printf("ERROR XX: Need an \"=\"\n");
 				exit(0);
 			}
 
 			cToken++;
 
 			if (cToken > size || list[cToken].tokenType != 3) {
-				printf("NEED A NUMBER\n");
+				printf("ERROR XX: Need a number\n");
 				exit(0);
 			}
 
-			table[symbolIndex].kind = 1;
-			strcpy(table[symbolIndex].name, string);
-			table[symbolIndex].val = atoi(list[cToken].lexeme);
-			table[symbolIndex].level = 0;
-			table[symbolIndex].addr = 0;
-			table[symbolIndex].mark = 0;
-			symbolIndex++;
+			table[iSymbol].kind = 1;
+			strcpy(table[iSymbol].name, string);
+			table[iSymbol].val = atoi(list[cToken].lexeme);
+			table[iSymbol].level = 0;
+			table[iSymbol].addr = 0;
+			table[iSymbol].mark = 0;
+			iSymbol++;
 			cToken++;
 
 		} while(strcmp(list[cToken].lexeme, ",") == 0);
 			if (cToken > size || list[cToken].tokenType != 18) {
-				printf("NEED A ;\n");
+				printf("ERROR XX: Need a \";\"\n");
 				exit(0);
 			}
 	} else {
@@ -106,6 +106,7 @@ void constDeclaration(lexeme *list, symbol *table) {
 	}
 }
 
+// handles variable declaration error detection
 void varDeclaration(lexeme *list, symbol *table) {
 	// if token is a var, process following tokens
 	if (list[cToken].tokenType == 29) {
@@ -120,14 +121,14 @@ void varDeclaration(lexeme *list, symbol *table) {
 			// if following token is not a duplicate
 			} else if (!checkIdent(list[cToken].lexeme, table)) {
 				// populate a new table entry
-				table[symbolIndex].kind = 1;
-				strcpy(table[symbolIndex].name, list[cToken].lexeme);
-				table[symbolIndex].val = 0;
-				table[symbolIndex].level = 0;
-				table[symbolIndex].addr = qVar;
-				table[symbolIndex].mark = 0;
+				table[iSymbol].kind = 1;
+				strcpy(table[iSymbol].name, list[cToken].lexeme);
+				table[iSymbol].val = 0;
+				table[iSymbol].level = 0;
+				table[iSymbol].addr = qVar;
+				table[iSymbol].mark = 0;
 				// increment table index
-				symbolIndex++;
+				iSymbol++;
 			} else if (checkIdent(list[cToken].lexeme, table)) {
 				// there is a duplicate value, print error and exit
 				printf("damn bud issa error");
@@ -145,10 +146,11 @@ void varDeclaration(lexeme *list, symbol *table) {
 	}
 }
 
+// checks for existence of symbol, return boolean (0-no dupe, 1-dupe)
 int checkIdent(char* search, symbol* table) {
 	// check to see if ident is already in the table
-	for (int i = 0; i < symbolIndex; i++) {
-		if (strcmp(search, table[symbolIndex].name) == 0) {
+	for (int i = 0; i < iSymbol; i++) {
+		if (strcmp(search, table[iSymbol].name) == 0) {
 			// there is a duplicate value, return true (1)
 			return 1;
 		}
@@ -239,7 +241,7 @@ void statement(lexeme *list, symbol *table) {
 		}
 		// if ID not in table, raise error
 		if (!checkIdent(list[cToken].lexeme, table)) {
-			printf("really really rich");
+			printf("really rich");
 			exit(0);
 		}
 		// if ID not a var
@@ -269,6 +271,7 @@ void statement(lexeme *list, symbol *table) {
 	return;
 }
 
+// handles conditional error detection
 void condition(lexeme *list, symbol *table) {
 	if (list[cToken].tokenType != 8) { // if token == odd ????????
 		cToken++;
@@ -290,6 +293,7 @@ void condition(lexeme *list, symbol *table) {
 	}
 }
 
+// handles expressional (arithmetic) error detection
 void expression(lexeme *list, symbol *table) {
 	// if token is "+" or "-", get next and process
 	if (list[cToken].tokenType == 4 || list[cToken].tokenType == 5) {
@@ -303,6 +307,7 @@ void expression(lexeme *list, symbol *table) {
 	}
 }
 
+// processes arithmetic and terms
 void term(lexeme *list, symbol *table) {
 	factor(list, table);
 	// while token is "*" or "/", process
@@ -312,6 +317,7 @@ void term(lexeme *list, symbol *table) {
 	}
 }
 
+// handles arithmetic error detection
 void factor(lexeme *list, symbol *table) {
 	// if token is an identifier
 	if (list[cToken].tokenType == 2) {
