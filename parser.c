@@ -43,7 +43,7 @@ symbol* parse(lexeme *list, int inputSize, int *symbolTableSize)
 
 void program(lexeme *list, symbol *table) {
 	block(list, table);
-	if (cToken > size || strcmp(list[cToken].lexeme, ".") != 0) {
+	if (cToken > size || list[cToken].tokenType == 19) {
 		errorFlag = 1;
 		printf("Error number 9, period expected\n");
 		// exit(0);
@@ -157,16 +157,120 @@ int checkIdent(char* search, symbol* table) {
 	return 0;
 }
 
+/*/////////////////////////////////////////
+	I have just written the rough draft
+	for the statement function, I haven't
+	done any debugging and the logic
+	for lines 174 and 245 have to be
+	specified.
+/////////////////////////////////////////*/
 void statement(lexeme *list, symbol *table) {
+	// if token is an ident, process
 	if (list[cToken].tokenType == 2) {
-
-
+		// if token !in table, raise error
+		if (!checkIdent(list[cToken].lexeme, table)) {
+			printf("got errors on errors");
+			exit(0);
+		}
+		if (1) { // if ident != var, raise error
+			printf("rollin in errors");
+			exit(0);
+		}
+		cToken++;
+		// if token not ":=", raise error
+		if (list[cToken].tokenType == 20) {
+			printf("fuck");
+			exit(0);
+		}
+		cToken++;
+		expression(list, table);
+		return;
 	}
-
+	// if token is "begin", process
+	if (list[cToken].tokenType == 21) {
+		cToken++;
+		statement(list, table);
+		// while token is ";", process
+		while (list[cToken].tokenType == 18) {
+			cToken++;
+			statement(list, table);
+		}
+		// if token not "end", raise error
+		if (list[cToken].tokenType != 22) {
+			printf("shit");
+			exit(0);
+		}
+		cToken++;
+		return;
+	}
+	// if token "if", process
+	if (list[cToken].tokenType == 23) {
+		cToken++;
+		condition(list, table);
+		// if token not "then", raise error
+		if (list[cToken].tokenType != 24) {
+			printf("bitch");
+			exit(0);
+		}
+		cToken++;
+		statement(list, table);
+		return;
+	}
+	// if token "while", process
+	if (list[cToken].tokenType == 25) {
+		cToken++;
+		condition(list, table);
+		// if token not "do", raise error
+		if (list[cToken].tokenType != 26) {
+			printf("young sheck wes,");
+			exit(0);
+		}
+		cToken++;
+		statement(list, table);
+		return;
+	}
+	// if token "read", process
+	if (list[cToken].tokenType == 32) {
+		cToken++;
+		// if token not ID, raise error
+		if (list[cToken].tokenType != 2) {
+			printf("and we getting");
+			exit(0);
+		}
+		// if ID not in table, raise error
+		if (!checkIdent(list[cToken].lexeme, table)) {
+			printf("really really rich");
+			exit(0);
+		}
+		// if ID not a var
+		if (1) {
+			printf("see how i caught it");
+			exit(0);
+		}
+		cToken++;
+		return;
+	}
+	// if token is "write", process
+	if (list[cToken].tokenType == 31) {
+		cToken++;
+		// if token not ID, raise error
+		if (list[cToken].tokenType != 2) {
+			printf("cause i be really");
+			exit(0);
+		}
+		// if ID not in table, raise error
+		if (!checkIdent(list[cToken].lexeme, table)) {
+			printf("with the shits");
+			exit(0);
+		}
+		cToken++;
+		return;
+	}
+	return;
 }
 
 void condition(lexeme *list, symbol *table) {
-	if (1) { // figure out wtf "odd" means
+	if (list[cToken].tokenType != 8) { // if token == odd ????????
 		cToken++;
 		expression(list, table);
 	} else {
