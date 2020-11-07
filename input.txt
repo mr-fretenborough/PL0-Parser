@@ -1,5 +1,5 @@
-const b = 5, c = 6, d = 7;
+const b = 4, c = 6, d = 7;
 var a, e, x, y;
 begin
-  x := y + 56;
+  a := e + 56;
 end.
