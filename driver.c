@@ -53,6 +53,7 @@ int main(int argc, char **argv)
 		}
 	}
 
+	// creates the lexeme list from an input file
 	lexeme *list = lexAnalyze(ifp, &lexemeListSize);
 	if (list == NULL)
 	{
@@ -64,18 +65,20 @@ int main(int argc, char **argv)
 	{
 		printLexemeList(list, lexemeListSize);
 		printSymbols(list, lexemeListSize);
+		printf("\n");
 	}
 
-
-
-
-
 	symbol *table = parse(list, lexemeListSize, &symbolTableSize);
+	printf("No errors, program is syntatically correct\n");
 
-	for (i = 0; i < 2; i++)
+
+/*
+	printf("TABLE SIZE:: %d\n\n", symbolTableSize);
+	for (i = 0; i < symbolTableSize; i++)
  	{
 		printf("KIND:: %d\nNAME:: %s\n\n", table[i].kind, table[i].name);
 	}
+*/
 
 /*
 	instruction *code = generate_code(table, list);
