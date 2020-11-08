@@ -25,6 +25,7 @@ int main(int argc, char **argv)
 	int i;
 	int lexemeListSize = 0;
 	int symbolTableSize = 0;
+	int codeLength = 0;
 
 	if (argc < 2)
 		printf("error : please include the file name\n");
@@ -80,8 +81,13 @@ int main(int argc, char **argv)
 	}
 */
 
+	instruction *code = generateCode(table, list, symbolTableSize, lexemeListSize, &codeLength);
+
+	for (i = 0; i < codeLength; i++)
+	{
+		printf("%s %d %d %d\n", code[i].op, code[i].r, code[i].l, code[i].m);
+	}
 /*
-	instruction *code = generate_code(table, list);
 	virtual_machine(code);
 */
 

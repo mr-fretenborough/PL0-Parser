@@ -7,12 +7,20 @@
 typedef struct instruction
 {
 	int opcode;
-	char *op;
+	char op[8];
+	int r;
 	int l;
 	int m;
-	
 } instruction;
 
-instruction* generate_code(symbol *table, lexeme *list);
+instruction* generateCode(symbol *table, lexeme *list, int tableSize, int listSize, int *codeSize);
+void genProgram				(symbol *table, lexeme *list, instruction *code);
+void genBlock					(symbol *table, lexeme *list, instruction *code);
+void genStatement			(symbol *table, lexeme *list, instruction *code);
+void genCondition			(symbol *table, lexeme *list, instruction *code);
+void genExpression		(symbol *table, lexeme *list, instruction *code, int reg);
+void genTerm					(symbol *table, lexeme *list, instruction *code, int reg);
+void genFactor				(symbol *table, lexeme *list, instruction *code, int reg);
+void emit							(char *op, int opcode, int r, int l, int m, instruction *code);
 
 #endif
