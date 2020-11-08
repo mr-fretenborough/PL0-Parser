@@ -38,7 +38,7 @@ symbol* parse(lexeme *list, int inputSize, int *symbolTableSize)
 
 	// if there are no errors, print the success message
 	if (!errorFlag)
-		printf("COMPLETED: Symbols have been parsed\n");
+		printf("\nNo errors, program is syntatically correct\n");
 	*symbolTableSize = iSymbol;
 	return table;
 }

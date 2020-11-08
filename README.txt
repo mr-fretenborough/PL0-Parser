@@ -25,9 +25,12 @@ ERROR LIST ::
 22: Right parenthesis missing.
 23: The preceding factor cannot begin with this symbol.
 24: An expression cannot begin with this symbol.
-25: This number is too large.
+25: Number is too long.
 26: Identifier has already been declared.
 27: End expected
 28: Identifier expected after read
 29: Can only read to a var.
 30: Identifier expected after write
+31: Invalid symbol.
+32: Identifier is too long
+33: Identifier does not start with a letter

@@ -188,7 +188,7 @@ lexeme* lexAnalyze(FILE *ifp, int *listCount)
 											// list[*listCount].tokenType = -4;
 											// strcpy(list[*listCount].lexeme, ":");
 											// (*listCount)++;
-											printf("ERROR: invalid symbol \"%s\"\n", ":");
+											printf("ERROR NUMBER 31: Invalid symbol \"%s\"\n", ":");
 											return NULL;
 									}
 									break;
@@ -199,7 +199,7 @@ lexeme* lexAnalyze(FILE *ifp, int *listCount)
 									// list[*listCount].lexeme[1] = '\0';
 									// (*listCount)++;
 									// c = fgetc(ifp);
-									printf("ERROR: invalid symbol \"%c\"\n", c);
+									printf("ERROR NUMBER 31: Invalid symbol \"%c\"\n", c);
 									return NULL;
 					}
 			}
@@ -228,7 +228,7 @@ int  isIdentifierValid(char *string, lexeme *list, int *counter)
         // strcpy(list[*counter].lexeme, string);
         // list[*counter].tokenType = -1;
         // (*counter)++;
-				printf("ERROR: identifier \"%s\" is too long.\n", string);
+				printf("ERROR NUMBER 32: identifier \"%s\" is too long.\n", string);
         return 0;
     }
     return 1;
@@ -320,7 +320,7 @@ int isNumberValid(char *string, lexeme *list, int *count)
       // list[*count].tokenType = -3;
       // strcpy(list[*count].lexeme, string);
       // (*count)++;
-			printf("ERROR: identifier \"%s\" does not start with a letter\n", string);
+			printf("ERROR NUMBER 33: identifier \"%s\" does not start with a letter\n", string);
       return 0;
     }
     else
@@ -328,7 +328,7 @@ int isNumberValid(char *string, lexeme *list, int *count)
       // list[*count].tokenType = -2;
       // strcpy(list[*count].lexeme, string);
       // (*count)++;
-			printf("ERROR: number \"%s\" is too long\n", string);
+			printf("ERROR NUMBER 25: number \"%s\" is too long\n", string);
       return 0;
     }
   }
@@ -372,7 +372,7 @@ void printLexemeTable(lexeme *list, int size)
 void printLexemeList(lexeme *list, int size)
 {
     // print the token types and add ID if type == 2 || 3
-    printf("\nLexeme List:\n");
+    printf("Lexeme List:\n");
     for (int i = 0; i < size; i++) {
         if (list[i].tokenType >= 0) {
             if (list[i].tokenType == 2 || list[i].tokenType == 3)

@@ -1,0 +1,9 @@
+var x, y, product;
+begin
+  read x;
+  read y;
+  product := 0;
+  if x > 0 then
+    product := x * y;
+  write product;
+end.

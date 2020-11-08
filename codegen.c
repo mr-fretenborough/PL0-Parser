@@ -36,7 +36,7 @@ instruction* generateCode(symbol *table, lexeme *list, int tableSize, int listSi
 	genProgram(table, list, code);
 
 	*codeSize = cx;
-	printf("\n\ncode has been generated");
+	// printf("\n\ncode has been generated\n");
 	return code;
 }
 //------------------------------------------------------------------------------
@@ -140,7 +140,7 @@ void genStatement(symbol *table, lexeme *list, instruction *code)
 		cToken++;
 		tableIndex = getTableIndex(table, list[cToken].lexeme);
 		cToken++;
-		emit("READ", 9, 0, 0, 2, code);
+		emit("SYS", 9, 0, 0, 2, code);
 		emit("STO", 4, 0, 0, table[tableIndex].addr, code);
 	}
 	// if token is write
@@ -150,16 +150,16 @@ void genStatement(symbol *table, lexeme *list, instruction *code)
 		tableIndex = getTableIndex(table, list[cToken].lexeme);
 
 		// if the identifier is a var
-		if (table[tableIndex].kind == 1)
-		{
-			emit("LOD", 3, 0, 0, table[tableIndex].addr, code);
-			emit("WRITE", 9, 0, 0, 1, code);
-		}
-		// if the identifier is a const
 		if (table[tableIndex].kind == 2)
 		{
+			emit("LOD", 3, 0, 0, table[tableIndex].addr, code);
+			emit("SYS", 9, 0, 0, 1, code);
+		}
+		// if the identifier is a const
+		if (table[tableIndex].kind == 1)
+		{
 			emit("LIT", 1, 0, 0, table[tableIndex].val, code);
-			emit("WRITE", 9, 0, 0, 1, code);
+			emit("SYS", 9, 0, 0, 1, code);
 		}
 		// grab the next token
 		cToken++;

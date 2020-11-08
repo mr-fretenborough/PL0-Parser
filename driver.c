@@ -54,14 +54,19 @@ int main(int argc, char **argv)
 		}
 	}
 
+	// print the source code
+	printFile(ifp);
+
 	// creates the lexeme list from an input file
 	lexeme *list = lexAnalyze(ifp, &lexemeListSize);
+	
+	// if the list returned null that means we encountered an error
 	if (list == NULL)
 	{
 		printf("\nError detected in scanner, exiting...\n");
 		return 0;
 	}
-
+	// check to see if user wants to print lexeme list
 	if (lFlag)
 	{
 		printLexemeList(list, lexemeListSize);
@@ -69,28 +74,19 @@ int main(int argc, char **argv)
 		printf("\n");
 	}
 
+	// generate the symbol table
 	symbol *table = parse(list, lexemeListSize, &symbolTableSize);
-	printf("No errors, program is syntatically correct\n");
 
-
-/*
-	printf("TABLE SIZE:: %d\n\n", symbolTableSize);
-	for (i = 0; i < symbolTableSize; i++)
- 	{
-		printf("KIND:: %d\nNAME:: %s\n\n", table[i].kind, table[i].name);
-	}
-*/
-
+	// generate the assembly code
 	instruction *code = generateCode(table, list, symbolTableSize, lexemeListSize, &codeLength);
 
-	printf("\n");
-	for (i = 0; i < codeLength; i++)
-	{
-		printf("%s %d %d %d\n", code[i].op, code[i].r, code[i].l, code[i].m);
-	}
-/*
-	virtual_machine(code);
-*/
+	// check to see if the user wants to print the assembly code
+	if (aFlag)
+		// for the assembly code print function
+
+	// check to see if the user wants to print the assembly execution
+	if (vFlag)
+		virtual_machine(code);
 
 	return 0;
 }
