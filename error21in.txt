@@ -1,0 +1,5 @@
+/* ERROR 21: ID too long */
+var abcdefghijkl, y
+begin
+    y := 1;
+end.

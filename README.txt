@@ -18,6 +18,6 @@ x 13: The preceding factor cannot begin with this symbol.
 x 17: Identifier expected after read
 x 18: Can only read to a var.
 x 19: Identifier expected after write
-x 20: Invalid symbol.
-x 21: Identifier is too long
-x 22: Identifier does not start with a letter
+20: Invalid symbol.
+21: Identifier is too long
+22: Identifier does not start with a letter
