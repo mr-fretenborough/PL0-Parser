@@ -36,14 +36,14 @@ instruction* generateCode(symbol *table, lexeme *list, int tableSize, int listSi
 	genProgram(table, list, code);
 
 	*codeSize = cx;
-	printf("code has been generated\n");
+	printf("\n\ncode has been generated");
 	return code;
 }
 //------------------------------------------------------------------------------
 void genProgram(symbol *table, lexeme *list, instruction *code) {
 	emit("JMP", 7, 0, 0, 1, code);
 	genBlock(table, list, code);
-	emit("HALT", 9, 0, 0, 3, code);
+	emit("SYS", 9, 0, 0, 3, code);
 }
 //------------------------------------------------------------------------------
 void genBlock(symbol *table, lexeme *list, instruction *code) {

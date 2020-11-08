@@ -83,6 +83,7 @@ int main(int argc, char **argv)
 
 	instruction *code = generateCode(table, list, symbolTableSize, lexemeListSize, &codeLength);
 
+	printf("\n");
 	for (i = 0; i < codeLength; i++)
 	{
 		printf("%s %d %d %d\n", code[i].op, code[i].r, code[i].l, code[i].m);

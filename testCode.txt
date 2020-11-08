@@ -1,0 +1,9 @@
+const k = 2;
+var x, y;
+begin
+    x := 6;
+    while x > 6 do
+    begin
+        x := x - k;
+    end
+end.

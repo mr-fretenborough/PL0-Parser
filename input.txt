@@ -1,5 +1,4 @@
-const b = 4, c = 6, d = 7;
-var a, e, x, y;
+var x, y;
 begin
-  a := e + 56;
+ x := y + 56;
 end.
