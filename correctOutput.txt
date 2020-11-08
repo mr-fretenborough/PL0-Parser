@@ -1,0 +1,60 @@
+Source Program:
+var x, y;
+begin
+ x := y + 56;
+end.
+
+Lexeme List:
+| 29 | 2 x | 17 | 2 y | 18 | 21 | 2 x | 20 | 2 y | 4 | 3 56 | 18 | 22 | 19 
+
+Symbolic Representation:
+| varsym | identsym x | commasym | identsym y | semicolonsym | beginsym | identsym x | becomessym | identsym y | plussym | numbersym 56 | semicolonsym | endsym | periodsym 
+
+
+No errors, program is syntatically correct
+
+Assembly Code ::
+LINE:	OP:	R:	L:	M:
+0	JMP	0	0	1
+1	INC	0	0	5
+2	LOD	0	0	4
+3	LIT	1	0	56
+4	ADD	0	0	1
+5	STO	0	0	3
+6	SYS	0	0	3
+
+
+			pc	bp	sp
+Initial Values		0	999	1000
+Registers: 0 0 0 0 0 0 0 0 
+Stack: 
+
+			pc	bp	sp
+0 JMP 0 0 1		1	999	1000
+Registers: 0 0 0 0 0 0 0 0 
+Stack: 
+
+1 INC 0 0 5		2	999	995
+Registers: 0 0 0 0 0 0 0 0 
+Stack: 0 0 0 0 0 
+
+2 LOD 0 0 4		3	999	995
+Registers: 0 0 0 0 0 0 0 0 
+Stack: 0 0 0 0 0 
+
+3 LIT 1 0 56		4	999	995
+Registers: 0 56 0 0 0 0 0 0 
+Stack: 0 0 0 0 0 
+
+4 ADD 0 0 1		5	999	995
+Registers: 56 56 0 0 0 0 0 0 
+Stack: 0 0 0 0 0 
+
+5 STO 0 0 3		6	999	995
+Registers: 56 56 0 0 0 0 0 0 
+Stack: 0 0 0 56 0 
+
+6 SYS 0 0 3		7	999	995
+Registers: 56 56 0 0 0 0 0 0 
+Stack: 0 0 0 56 0 
+
