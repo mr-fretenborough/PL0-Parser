@@ -130,6 +130,8 @@ void genStatement(symbol *table, lexeme *list, instruction *code)
 		cToken++;
 		codeIndexForJump = cx; // save the code index at the jump
 		emit("JPC", 8, 0, 0, 0, code);
+		genStatement(table, list, code);
+		emit("JMP", 7, 0, 0, codeIndexForCondition, code);
 		code[codeIndexForJump].m = cx;
 	}
 	// if the token is read
@@ -156,7 +158,7 @@ void genStatement(symbol *table, lexeme *list, instruction *code)
 		// if the identifier is a const
 		if (table[tableIndex].kind == 2)
 		{
-			emit("LIT", 1, 0, 0, table[tableIndex].addr, code);
+			emit("LIT", 1, 0, 0, table[tableIndex].val, code);
 			emit("WRITE", 9, 0, 0, 1, code);
 		}
 		// grab the next token
@@ -315,7 +317,7 @@ void genFactor(symbol *table, lexeme *list, instruction *code, int reg)
 		// if the token is a const
 		if (table[tableIndex].kind == 1)
 		{
-			emit("LIT", 1, reg, 0, table[tableIndex].addr, code);
+			emit("LIT", 1, reg, 0, table[tableIndex].val, code);
 		}
 		// if the token is a var
 		if (table[tableIndex].kind == 2)
@@ -341,7 +343,7 @@ void genFactor(symbol *table, lexeme *list, instruction *code, int reg)
 //------------------------------------------------------------------------------
 void emit(char *op, int opcode, int r, int l, int m, instruction *code) {
 	if (cx > CODE_SIZE) {
-		printf("oops");
+		printf("ERROR: Code exceeds maximum length\n");
 		exit(0);
 	} else {
 		strcpy(code[cx].op, op);

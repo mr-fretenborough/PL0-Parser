@@ -141,7 +141,7 @@ void varDeclaration(lexeme *list, symbol *table) {
 				strcpy(table[iSymbol].name, list[cToken].lexeme);
 				table[iSymbol].val = 0;
 				table[iSymbol].level = 0;
-				table[iSymbol].addr = qVar + 1;
+				table[iSymbol].addr = qVar;
 				table[iSymbol].mark = 0;
 				// increment table index
 				iSymbol++;
