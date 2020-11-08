@@ -26,15 +26,6 @@ void virtual_machine(instruction *code, int lCode) {
 	int temp;
 	instruction IR;
 
-/*
-	// print out the generated assembly code
-	printf("Line\tOP\tR\tL\tM\n");
-	for (int i = 0; i < lCode; i++) {
-		printf("%d\t%s\t%d\t%d\t%d\n",
-			i, code[i].op, code[i].r, code[i].l, code[i].m);
-	}
-*/
-
 	// print the initial values
 	printf("\n\n\t\t\tpc\tbp\tsp\n");
 	printf("Initial Values\t\t%d\t%d\t%d\n", PC, BP, SP);
