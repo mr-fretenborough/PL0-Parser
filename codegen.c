@@ -38,7 +38,7 @@ instruction* generateCode(symbol *table, lexeme *list, int tableSize, int listSi
 
 	*codeSize = cx;
 	// printf("\n\ncode has been generated\n");
-
+	addLineNum(code, cx);
 	return code;
 }
 //------------------------------------------------------------------------------
