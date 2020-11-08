@@ -47,7 +47,7 @@ void program(lexeme *list, symbol *table) {
 	block(list, table);
 	if (cToken > size || list[cToken].tokenType != 19) {
 		errorFlag = 1;
-		printf("ERROR 9: Period expected\n");
+		printf("ERROR NUMBER 9: Period expected\n");
 		exit(0);
 	}
 }
