@@ -1,0 +1,5 @@
+var x, y;
+begin
+    /* ERROR 14: Number is too long */
+    x := 123456789;
+end.

@@ -1,0 +1,5 @@
+var x, y;
+begin
+    /* ERROR 12: ")" expected */
+    x := (3 + 1;
+end.

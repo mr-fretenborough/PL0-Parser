@@ -1,0 +1,13 @@
+Source Program:
+var x, y;
+begin
+    /* ERROR 12: ")" expected */
+    x := (3 + 1;
+end.
+Lexeme List:
+| 29 | 2 x | 17 | 2 y | 18 | 21 | 2 x | 20 | 15 | 3 3 | 4 | 3 1 | 18 | 22 | 19
+
+Symbolic Representation:
+| varsym | identsym x | commasym | identsym y | semicolonsym | beginsym | identsym x | becomessym | lparentsym | numbersym 3 | plussym | numbersym 1 | semicolonsym | endsym | periodsym
+
+ERROR NUMBER 22: Right parenthesis missing.
