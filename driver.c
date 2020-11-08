@@ -84,7 +84,7 @@ int main(int argc, char **argv)
 	if (aFlag)
 	{
 		printf("Assembly Code ::\n");
-		printExecution(code, codeLength);
+		printAssembly(code, codeLength);
 	}
 
 	// check to see if the user wants to print the assembly execution
