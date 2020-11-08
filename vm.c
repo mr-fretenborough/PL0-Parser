@@ -13,7 +13,7 @@ int dynamicLinks[MAX_STACK_HEIGHT] = {0};
 // fucntion prototypes
 void virtual_machine(instruction *code, int lCode);
 int base(int L, int base);
-void printExecution(instruction* code, int lCode);
+void printAssembly(instruction* code, int lCode);
 
 //------------------------------------------------------------------------------
 void virtual_machine(instruction *code, int lCode) {
@@ -185,15 +185,15 @@ int base(int L, int base)
 
 //------------------------------------------------------------------------------
 // prints the interpreted assembly code
-void printExecution(instruction* code, int lCode) {
+void printAssembly(instruction* code, int lCode) {
 	printf("LINE:\tOP:\tR:\tL:\tM:\n");
 	for (int i = 0; i < lCode; i++)
 	{
-		printf("%d\t", i);                // print the line number
-		printf("%s\t", code[i].op);   // print the name of the op code
-		printf("%d\t", code[i].r);        // print the R value
-		printf("%d\t", code[i].l);        // print the L value
-		printf("%d\n", code[i].m);        // print the M value
+		printf("%d\t", i);				// print the line number
+		printf("%s\t", code[i].op);		// print the name of the op code
+		printf("%d\t", code[i].r);		// print the R value
+		printf("%d\t", code[i].l);		// print the L value
+		printf("%d\n", code[i].m);		// print the M value
 	}
 }
 //------------------------------------------------------------------------------
