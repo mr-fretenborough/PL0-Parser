@@ -6,6 +6,7 @@
 
 typedef struct instruction
 {
+	int lineNum;
 	int opcode;
 	char op[8];
 	int r;
@@ -22,5 +23,7 @@ void genExpression		(symbol *table, lexeme *list, instruction *code, int reg);
 void genTerm					(symbol *table, lexeme *list, instruction *code, int reg);
 void genFactor				(symbol *table, lexeme *list, instruction *code, int reg);
 void emit							(char *op, int opcode, int r, int l, int m, instruction *code);
+void addLineNum(instruction *code, int codeSize);
+
 
 #endif

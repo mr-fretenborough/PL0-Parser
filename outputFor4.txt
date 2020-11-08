@@ -1,0 +1,34 @@
+Source Program:
+var x, w;
+begin
+   x := 4;
+   read w;
+   if w > x then
+      w := w + 1;
+   write w;
+end.
+
+
+No errors, program is syntactically correct.
+
+Line	OP	R	L	M
+0  	JMP	0  	0  	1
+1  	INC	0  	0  	5  
+2  	LIT	0  	0  	4
+3  	STO	0  	0  	3
+4  	SYS	0  	0  	2
+5  	STO	0  	0  	4
+6  	LOD	0  	0  	4
+7  	LOD	1  	0  	3
+8  	GTR	0  	0  	1
+9  	JPC	0  	0  	14
+10 	LOD	0  	0  	4
+11 	LIT	1  	0  	1
+12 	ADD	0  	0  	1
+13 	STO	0  	0  	4
+14 	LOD	0  	0  	4
+15 	SYS	0  	0  	1
+16 	SYS	0  	0  	3
+
+Please enter an integer:
+Register 0: 2

@@ -21,6 +21,7 @@ void genTerm					(symbol *table, lexeme *list, instruction *code, int reg);
 void genFactor				(symbol *table, lexeme *list, instruction *code, int reg);
 void emit							(char *op, int opcode, int r, int l, int m, instruction *code);
 int getTableIndex			(symbol *table, char *target);
+void addLineNum(instruction *code, int codeSize);
 
 
 //------------------------------------------------------------------------------
@@ -37,6 +38,7 @@ instruction* generateCode(symbol *table, lexeme *list, int tableSize, int listSi
 
 	*codeSize = cx;
 	// printf("\n\ncode has been generated\n");
+
 	return code;
 }
 //------------------------------------------------------------------------------
@@ -366,4 +368,11 @@ int getTableIndex(symbol *table, char *target)
 			return i;
 	}
 	return 0;
+}
+//------------------------------------------------------------------------------
+void addLineNum(instruction *code, int codeSize)
+{
+	int i;
+	for (i = 0; i < codeSize; i++)
+		code[i].lineNum = i;
 }

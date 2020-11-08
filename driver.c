@@ -59,7 +59,7 @@ int main(int argc, char **argv)
 
 	// creates the lexeme list from an input file
 	lexeme *list = lexAnalyze(ifp, &lexemeListSize);
-	
+
 	// if the list returned null that means we encountered an error
 	if (list == NULL)
 	{
@@ -82,11 +82,14 @@ int main(int argc, char **argv)
 
 	// check to see if the user wants to print the assembly code
 	if (aFlag)
-		// for the assembly code print function
+	{
+		printf("Assembly Code ::\n");
+		printExecution(code, codeLength);
+	}
 
 	// check to see if the user wants to print the assembly execution
 	if (vFlag)
-		virtual_machine(code);
+		virtual_machine(code, codeLength);
 
 	return 0;
 }
