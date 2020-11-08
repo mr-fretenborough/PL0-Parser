@@ -47,7 +47,7 @@ void program(lexeme *list, symbol *table) {
 	block(list, table);
 	if (cToken > size || list[cToken].tokenType != 19) {
 		errorFlag = 1;
-		printf("ERROR NUMBER 9: Period expected\n");
+		printf("ERROR NUMBER 5: Period expected\n");
 		exit(0);
 	}
 }
@@ -69,7 +69,7 @@ void constDeclaration(lexeme *list, symbol *table) {
 			// grab the next token and make sure its an identifier
 			cToken++;
 			if (cToken >= size || list[cToken].tokenType != 2) {
-				printf("ERROR NUMBER 4: const, var, procedure must be followed by identifier.\n");
+				printf("ERROR NUMBER 3: const, var, procedure must be followed by identifier.\n");
 				exit(0);
 			}
 
@@ -78,21 +78,21 @@ void constDeclaration(lexeme *list, symbol *table) {
 
 			// make sure the identifier is not already in the symbol table
 			if (checkIdent(list[cToken].lexeme, table)) {
-				printf("ERROR NUMBER 26: Identifier \"%s\" has already been declared.\n", list[cToken].lexeme);
+				printf("ERROR NUMBER 15: Identifier \"%s\" has already been declared.\n", list[cToken].lexeme);
 				exit(0);
 			}
 
 			// grab the next toke and make sure its an "="
 			cToken++;
 			if (cToken >= size || list[cToken].tokenType != 9) {
-				printf("ERROR NUMBER 3: Identifier \"%s\" must be followed by \"=\".\n", string);
+				printf("ERROR NUMBER 2: Identifier \"%s\" must be followed by \"=\".\n", string);
 				exit(0);
 			}
 
 			// grab the next token and make sure its a number
 			cToken++;
 			if (cToken >= size || list[cToken].tokenType != 3) {
-				printf("ERROR NUMBER 2: \"=\" must be followed by a number.\n");
+				printf("ERROR NUMBER 1: \"=\" must be followed by a number.\n");
 				exit(0);
 			}
 
@@ -111,7 +111,7 @@ void constDeclaration(lexeme *list, symbol *table) {
 
 		// make sure that the next token is a ";"
 		if (cToken >= size || list[cToken].tokenType != 18) {
-			printf("ERROR NUMBER 5: Semicolon or comma missing.\n");
+			printf("ERROR NUMBER 4: Semicolon or comma missing.\n");
 			exit(0);
 		} else {
 			cToken++;
@@ -132,7 +132,7 @@ void varDeclaration(lexeme *list, symbol *table) {
 			qVar++;
 			// if following token is not an ident, raise error
 			if (cToken >= size || list[++cToken].tokenType != 2) {
-				printf("ERROR NUMBER 4: const, var, procedure must be followed by identifier.\n");
+				printf("ERROR NUMBER 3: const, var, procedure must be followed by identifier.\n");
 				exit(0);
 			// if following token is not a duplicate
 			} else if (!checkIdent(list[cToken].lexeme, table)) {
@@ -148,14 +148,14 @@ void varDeclaration(lexeme *list, symbol *table) {
 				cToken++;
 			} else if (checkIdent(list[cToken].lexeme, table)) {
 				// there is a duplicate value, print error and exit
-				printf("ERROR NUMBER 26: Identifier \"%s\" has already been declared.\n", list[cToken].lexeme);
+				printf("ERROR NUMBER 15: Identifier \"%s\" has already been declared.\n", list[cToken].lexeme);
 				exit(0);
 			}
 			// continue if next token is a ","
 		} while (list[cToken].tokenType == 17);
 		// if the next token is not an ";", raise error
 		if (cToken >= size || list[cToken].tokenType != 18) {
-			printf("ERROR NUMBER 5: Semicolon or comma missing.\n");
+			printf("ERROR NUMBER 4: Semicolon or comma missing.\n");
 			exit(0);
 		// get next token and return
 		} else {
@@ -184,17 +184,17 @@ void statement(lexeme *list, symbol *table) {
 	if (list[cToken].tokenType == 2) {
 		// if token !in table, raise error
 		if (!checkIdent(list[cToken].lexeme, table)) {
-			printf("ERROR NUMBER 11: Undeclared identifier.\n");
+			printf("ERROR NUMBER 6: Undeclared identifier.\n");
 			exit(0);
 		}
 		if (!isVar(list[cToken].lexeme, table)) { // if ident != var, raise error
-			printf("ERROR NUMBER 12: Assignment to constant or procedure is not allowed.\n");
+			printf("ERROR NUMBER 7: Assignment to constant or procedure is not allowed.\n");
 			exit(0);
 		}
 		cToken++;
 		// if token not ":=", raise error
 		if (list[cToken].tokenType != 20) {
-			printf("ERROR NUMBER 13: Assignment operator expected.\n");
+			printf("ERROR NUMBER 8: Assignment operator expected.\n");
 			exit(0);
 		}
 		cToken++;
@@ -212,7 +212,7 @@ void statement(lexeme *list, symbol *table) {
 		}
 		// if token not "end", raise error
 		if (list[cToken].tokenType != 22) {
-			printf("ERROR NUMBER 27: End expected\n");
+			printf("ERROR NUMBER 16: End expected\n");
 			exit(0);
 		}
 		cToken++;
@@ -224,7 +224,7 @@ void statement(lexeme *list, symbol *table) {
 		condition(list, table);
 		// if token not "then", raise error
 		if (list[cToken].tokenType != 24) {
-			printf("ERROR NUMBER 16: then expected.\n");
+			printf("ERROR NUMBER 9: then expected.\n");
 			exit(0);
 		}
 		cToken++;
@@ -237,7 +237,7 @@ void statement(lexeme *list, symbol *table) {
 		condition(list, table);
 		// if token not "do", raise error
 		if (list[cToken].tokenType != 26) {
-			printf("ERROR NUMBER 18: do expected.\n");
+			printf("ERROR NUMBER 10: do expected.\n");
 			exit(0);
 		}
 		cToken++;
@@ -249,17 +249,17 @@ void statement(lexeme *list, symbol *table) {
 		cToken++;
 		// if token not ID, raise error
 		if (list[cToken].tokenType != 2) {
-			printf("ERROR NUMBER 28: Identifier expected after read\n");
+			printf("ERROR NUMBER 17: Identifier expected after read\n");
 			exit(0);
 		}
 		// if ID not in table, raise error
 		if (!checkIdent(list[cToken].lexeme, table)) {
-			printf("ERROR NUMBER 11: Undeclared identifier.\n");
+			printf("ERROR NUMBER 6: Undeclared identifier.\n");
 			exit(0);
 		}
 		// if ID not a var
 		if (!isVar(list[cToken].lexeme, table)) {
-			printf("ERROR NUMBER 29: Can only read to a var.\n");
+			printf("ERROR NUMBER 18: Can only read to a var.\n");
 			exit(0);
 		}
 		cToken++;
@@ -270,12 +270,12 @@ void statement(lexeme *list, symbol *table) {
 		cToken++;
 		// if token not ID, raise error
 		if (list[cToken].tokenType != 2) {
-			printf("ERROR NUMBER 30: Identifier expected after write\n");
+			printf("ERROR NUMBER 19: Identifier expected after write\n");
 			exit(0);
 		}
 		// if ID not in table, raise error
 		if (!checkIdent(list[cToken].lexeme, table)) {
-			printf("ERROR NUMBER 11: Undeclared identifier.\n");
+			printf("ERROR NUMBER 6: Undeclared identifier.\n");
 			exit(0);
 		}
 		cToken++;
@@ -298,7 +298,7 @@ void condition(lexeme *list, symbol *table) {
 		 || list[cToken].tokenType == 12	// "<="
 		 || list[cToken].tokenType == 13	// ">"
 		 || list[cToken].tokenType == 14)) {	// ">="
-			 printf("ERROR NUMBER 20: Relational operator expected.\n");
+			 printf("ERROR NUMBER 11: Relational operator expected.\n");
 			 exit(0);
 		 } // figure out these codes
 		 cToken++;
@@ -336,7 +336,7 @@ void factor(lexeme *list, symbol *table) {
 	if (list[cToken].tokenType == 2) {
 		// if the ID is not in the table, raise error
 		if (!checkIdent(list[cToken].lexeme, table)) {
-			printf("ERROR NUMBER 11: Undeclared identifier.\n");
+			printf("ERROR NUMBER 6: Undeclared identifier.\n");
 			exit(0);
 		}
 		cToken++;
@@ -349,12 +349,12 @@ void factor(lexeme *list, symbol *table) {
 		expression(list, table);
 		// if token is not ")", raise error
 		if (list[cToken].tokenType != 16) {
-			printf("ERROR NUMBER 22: Right parenthesis missing.\n");
+			printf("ERROR NUMBER 12: Right parenthesis missing.\n");
 			exit(0);
 		}
 		cToken++;
 	} else {
-		printf("ERROR NUMBER 23: The preceding factor cannot begin with this symbol.\n");
+		printf("ERROR NUMBER 13: The preceding factor cannot begin with this symbol.\n");
 		exit(0);
 	}
 }

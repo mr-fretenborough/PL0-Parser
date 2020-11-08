@@ -188,7 +188,7 @@ lexeme* lexAnalyze(FILE *ifp, int *listCount)
 											// list[*listCount].tokenType = -4;
 											// strcpy(list[*listCount].lexeme, ":");
 											// (*listCount)++;
-											printf("ERROR NUMBER 31: Invalid symbol \"%s\"\n", ":");
+											printf("ERROR NUMBER 20: Invalid symbol \"%s\"\n", ":");
 											return NULL;
 									}
 									break;
@@ -199,7 +199,7 @@ lexeme* lexAnalyze(FILE *ifp, int *listCount)
 									// list[*listCount].lexeme[1] = '\0';
 									// (*listCount)++;
 									// c = fgetc(ifp);
-									printf("ERROR NUMBER 31: Invalid symbol \"%c\"\n", c);
+									printf("ERROR NUMBER 20: Invalid symbol \"%c\"\n", c);
 									return NULL;
 					}
 			}
@@ -228,7 +228,7 @@ int  isIdentifierValid(char *string, lexeme *list, int *counter)
         // strcpy(list[*counter].lexeme, string);
         // list[*counter].tokenType = -1;
         // (*counter)++;
-				printf("ERROR NUMBER 32: identifier \"%s\" is too long.\n", string);
+				printf("ERROR NUMBER 21: identifier \"%s\" is too long.\n", string);
         return 0;
     }
     return 1;
@@ -320,7 +320,7 @@ int isNumberValid(char *string, lexeme *list, int *count)
       // list[*count].tokenType = -3;
       // strcpy(list[*count].lexeme, string);
       // (*count)++;
-			printf("ERROR NUMBER 33: identifier \"%s\" does not start with a letter\n", string);
+			printf("ERROR NUMBER 22: identifier \"%s\" does not start with a letter\n", string);
       return 0;
     }
     else
@@ -328,7 +328,7 @@ int isNumberValid(char *string, lexeme *list, int *count)
       // list[*count].tokenType = -2;
       // strcpy(list[*count].lexeme, string);
       // (*count)++;
-			printf("ERROR NUMBER 25: number \"%s\" is too long\n", string);
+			printf("ERROR NUMBER 14: number \"%s\" is too long\n", string);
       return 0;
     }
   }

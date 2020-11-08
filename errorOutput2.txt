@@ -1,0 +1,10 @@
+Source Program:
+const a;
+
+Lexeme List:
+| 28 | 2 a | 18 
+
+Symbolic Representation:
+| constsym | identsym a | semicolonsym 
+
+ERROR NUMBER 3: Identifier "a" must be followed by "=".
