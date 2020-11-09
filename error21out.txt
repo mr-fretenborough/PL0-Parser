@@ -1,0 +1,9 @@
+Source Program:
+/* ERROR 21: ID too long */
+var abcdefghijkl, y
+begin
+    y := 1;
+end.
+ERROR NUMBER 21: identifier "abcdefghijkl" is too long.
+
+Error detected in scanner, exiting...

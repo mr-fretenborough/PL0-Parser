@@ -1,0 +1,12 @@
+Source Program:
+var x, y;
+begin
+    x := 1;
+/* ERROR 16: An "end" expected */
+Lexeme List:
+| 29 | 2 x | 17 | 2 y | 18 | 21 | 2 x | 20 | 3 1 | 18
+
+Symbolic Representation:
+| varsym | identsym x | commasym | identsym y | semicolonsym | beginsym | identsym x | becomessym | numbersym 1 | semicolonsym
+
+ERROR NUMBER 16: End expected

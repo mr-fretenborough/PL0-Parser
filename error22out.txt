@@ -1,0 +1,9 @@
+Source Program:
+/* ERROR 22: ID does not start with letter */
+var 1x, y;
+begin
+    y := 1;
+end.
+ERROR NUMBER 22: identifier "1x" does not start with a letter
+
+Error detected in scanner, exiting...
