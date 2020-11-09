@@ -1,0 +1,5 @@
+var x, y;
+begin
+    /* ERROR 19: ID expected after "write" */
+    write 1;
+end.
