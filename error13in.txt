@@ -1,0 +1,6 @@
+/* error number 13: The preceding factor cannot begin with this symbol. */
+var x, y;
+if 5 + >
+begin
+ x := y + 56;
+end.
