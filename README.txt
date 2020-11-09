@@ -1,3 +1,6 @@
+Kier Fretenborough
+Bryce Hitchcock
+
 HOW TO RUN ::
 $ gcc driver.c lex.c parser.c codegen.c vm.c
 $ ./a.out correctInput.txt -l -a -v
