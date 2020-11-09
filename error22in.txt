@@ -1,0 +1,5 @@
+/* ERROR 22: ID does not start with letter */
+var 1x, y;
+begin
+    y := 1;
+end.

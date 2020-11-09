@@ -1,5 +1,5 @@
-var x, y;
+/* ERROR 15: ID has already been declared */
+var x, x;
 begin
-    /* ERROR 14: ID has already been declared */
-    var x;
+    x := 1;
 end.
