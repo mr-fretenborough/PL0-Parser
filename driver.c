@@ -1,3 +1,9 @@
+// Kier Fretenborough and Bryce Hitchcock
+// COP 3402 Computer Architecture
+// Homework #3: PL-0 Parser/CodeGen
+// Prof. Mantagne
+// 2020 November 8
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "lex.h"
