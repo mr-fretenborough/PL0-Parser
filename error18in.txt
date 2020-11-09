@@ -1,6 +1,5 @@
-var x, y;
+const a = 1;
 begin
-    const a := 1;
     /* ERROR 18: Can only "read" to var */
     read a;
 end.
