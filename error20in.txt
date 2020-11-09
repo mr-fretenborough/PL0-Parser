@@ -1,0 +1,5 @@
+var x, y;
+begin
+    /* ERROR 20: Invalid symbol */
+    x :- 1;
+end.
