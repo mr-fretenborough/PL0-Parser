@@ -1,0 +1,9 @@
+Source Program:
+var x, y;
+begin
+    /* ERROR 14: Number is too long */
+    x := 123456789;
+end.
+ERROR NUMBER 14: number "123456789" is too long
+
+Error detected in scanner, exiting...

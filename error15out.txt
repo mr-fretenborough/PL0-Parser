@@ -1,0 +1,13 @@
+Source Program:
+/* ERROR 15: ID has already been declared */
+var x, x;
+begin
+    x := 1
+end.
+Lexeme List:
+| 29 | 2 x | 17 | 2 x | 18 | 21 | 2 x | 20 | 3 1 | 22 | 19
+
+Symbolic Representation:
+| varsym | identsym x | commasym | identsym x | semicolonsym | beginsym | identsym x | becomessym | numbersym 1 | endsym | periodsym
+
+ERROR NUMBER 15: Identifier "x" has already been declared.
