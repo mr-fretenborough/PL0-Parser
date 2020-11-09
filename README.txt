@@ -11,13 +11,13 @@ ERROR LIST ::
 10: do expected.
 11: Relational operator expected.
 12: Right parenthesis missing.
-13: The preceding factor cannot begin with this symbol.
+x 13: The preceding factor cannot begin with this symbol.
 14: Number is too long.
 15: Identifier has already been declared.
 16: End expected
-17: Identifier expected after read
-18: Can only read to a var.
-19: Identifier expected after write
-20: Invalid symbol.
+x 17: Identifier expected after read
+x 18: Can only read to a var.
+x 19: Identifier expected after write
+x 20: Invalid symbol.
 21: Identifier is too long
 22: Identifier does not start with a letter
