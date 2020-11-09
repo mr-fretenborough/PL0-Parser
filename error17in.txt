@@ -1,0 +1,4 @@
+var x, y;
+begin
+    read 1;
+end.

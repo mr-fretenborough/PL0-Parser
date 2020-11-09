@@ -1,0 +1,12 @@
+Source Program:
+var x, y;
+begin
+    read 1;
+end.
+Lexeme List:
+| 29 | 2 x | 17 | 2 y | 18 | 21 | 32 | 3 1 | 18 | 22 | 19
+
+Symbolic Representation:
+| varsym | identsym x | commasym | identsym y | semicolonsym | beginsym | readsym | numbersym 1 | semicolonsym | endsym | periodsym
+
+ERROR NUMBER 17: Identifier expected after read
