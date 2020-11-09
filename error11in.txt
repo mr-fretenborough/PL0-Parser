@@ -1,0 +1,6 @@
+/* error number 11: Relational operator expected. */
+var x, y;
+begin
+ if 
+ x := y + 56;
+end.

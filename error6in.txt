@@ -1,0 +1,5 @@
+/* error number 6: Undeclared identifier. */
+var x, y;
+begin
+  z := y + 56;
+end.

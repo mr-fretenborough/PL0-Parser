@@ -1,0 +1,5 @@
+/* error number 3, const, var, procedure must be followed by identifier. */
+var ;
+begin
+ x := y + 56;
+end.

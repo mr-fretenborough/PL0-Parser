@@ -1,0 +1,5 @@
+/* error number 8: Assignment operator expected. */
+var x, y;
+begin
+ x  y + 56;
+end.

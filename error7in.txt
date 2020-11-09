@@ -1,0 +1,6 @@
+/* error number 7: Assignment to constant or procedure is not allowed. */
+const z = 5;
+var x, y;
+begin
+ z := y + 56;
+end.

@@ -1,0 +1,15 @@
+Source Program:
+/* error number 2, Identifier must be followed by =. */
+const a;
+var x, y;
+begin
+ x := y + 56;
+end.
+
+Lexeme List:
+| 28 | 2 a | 18 | 29 | 2 x | 17 | 2 y | 18 | 21 | 2 x | 20 | 2 y | 4 | 3 56 | 18 | 22 | 19 
+
+Symbolic Representation:
+| constsym | identsym a | semicolonsym | varsym | identsym x | commasym | identsym y | semicolonsym | beginsym | identsym x | becomessym | identsym y | plussym | numbersym 56 | semicolonsym | endsym | periodsym 
+
+ERROR NUMBER 2: Identifier "a" must be followed by "=".

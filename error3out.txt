@@ -1,0 +1,14 @@
+Source Program:
+/* error number 3, const, var, procedure must be followed by identifier. */
+var ;
+begin
+ x := y + 56;
+end.
+
+Lexeme List:
+| 29 | 18 | 21 | 2 x | 20 | 2 y | 4 | 3 56 | 18 | 22 | 19 
+
+Symbolic Representation:
+| varsym | semicolonsym | beginsym | identsym x | becomessym | identsym y | plussym | numbersym 56 | semicolonsym | endsym | periodsym 
+
+ERROR NUMBER 3: const, var, procedure must be followed by identifier.

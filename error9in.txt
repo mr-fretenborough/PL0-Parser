@@ -1,0 +1,6 @@
+/* error number 9: then expected. */
+var x, y;
+begin
+ if x > 7
+ x := y + 56;
+end.

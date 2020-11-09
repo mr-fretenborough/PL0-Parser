@@ -12,4 +12,4 @@ Lexeme List:
 Symbolic Representation:
 | constsym | identsym a | eqlsym | semicolonsym | varsym | identsym x | commasym | identsym y | semicolonsym | beginsym | identsym x | becomessym | identsym y | plussym | numbersym 56 | semicolonsym | endsym | periodsym 
 
-ERROR NUMBER 2: "=" must be followed by a number.
+ERROR NUMBER 1: "=" must be followed by a number.

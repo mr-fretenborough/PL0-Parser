@@ -1,0 +1,15 @@
+Source Program:
+/* error number 7: Assignment to constant or procedure is not allowed. */
+const z = 5;
+var x, y;
+begin
+ z := y + 56;
+end.
+
+Lexeme List:
+| 28 | 2 z | 9 | 3 5 | 18 | 29 | 2 x | 17 | 2 y | 18 | 21 | 2 z | 20 | 2 y | 4 | 3 56 | 18 | 22 | 19 
+
+Symbolic Representation:
+| constsym | identsym z | eqlsym | numbersym 5 | semicolonsym | varsym | identsym x | commasym | identsym y | semicolonsym | beginsym | identsym z | becomessym | identsym y | plussym | numbersym 56 | semicolonsym | endsym | periodsym 
+
+ERROR NUMBER 7: Assignment to constant or procedure is not allowed.

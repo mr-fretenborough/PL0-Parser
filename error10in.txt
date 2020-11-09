@@ -1,0 +1,6 @@
+/* error number 10: do expected. */
+var x, y;
+begin
+ while x > 4
+ x := y + 56;
+end.

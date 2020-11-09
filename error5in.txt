@@ -1,0 +1,5 @@
+/* error number 5: Period expected. */
+var x, y;
+begin
+ x := y + 56;
+end

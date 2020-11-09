@@ -1,0 +1,14 @@
+Source Program:
+/* error number 4: Semicolon or comma missing. */
+var x, y
+begin
+ x := y + 56;
+end.
+
+Lexeme List:
+| 29 | 2 x | 17 | 2 y | 21 | 2 x | 20 | 2 y | 4 | 3 56 | 18 | 22 | 19 
+
+Symbolic Representation:
+| varsym | identsym x | commasym | identsym y | beginsym | identsym x | becomessym | identsym y | plussym | numbersym 56 | semicolonsym | endsym | periodsym 
+
+ERROR NUMBER 4: Semicolon or comma missing.

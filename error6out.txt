@@ -1,0 +1,14 @@
+Source Program:
+/* error number 6: Undeclared identifier. */
+var x, y;
+begin
+  z := y + 56;
+end.
+
+Lexeme List:
+| 29 | 2 x | 17 | 2 y | 18 | 21 | 2 z | 20 | 2 y | 4 | 3 56 | 18 | 22 | 19 
+
+Symbolic Representation:
+| varsym | identsym x | commasym | identsym y | semicolonsym | beginsym | identsym z | becomessym | identsym y | plussym | numbersym 56 | semicolonsym | endsym | periodsym 
+
+ERROR NUMBER 6: Undeclared identifier.

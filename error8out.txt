@@ -1,0 +1,14 @@
+Source Program:
+/* error number 8: Assignment operator expected. */
+var x, y;
+begin
+ x  y + 56;
+end.
+
+Lexeme List:
+| 29 | 2 x | 17 | 2 y | 18 | 21 | 2 x | 2 y | 4 | 3 56 | 18 | 22 | 19 
+
+Symbolic Representation:
+| varsym | identsym x | commasym | identsym y | semicolonsym | beginsym | identsym x | identsym y | plussym | numbersym 56 | semicolonsym | endsym | periodsym 
+
+ERROR NUMBER 8: Assignment operator expected.
