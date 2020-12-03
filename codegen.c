@@ -57,7 +57,7 @@ void genProgram(symbol *table, lexeme *list, instruction *code) {
 	genBlock(table, list, code, 0);
 	// tbh i dont get this code
 	for (i = 0; code[i].opcode == 7; i++) {
-		code[i].m = 1 // replace 1 "the m from that proc's sym tbl entry" !
+		code[i].m = 1; // replace 1 "the m from that proc's sym tbl entry" !
 	}
 
 	// for each line of code
@@ -97,7 +97,7 @@ void genBlock(symbol *table, lexeme *list, instruction *code, int lex) {
 			cToken++;
 			numVars++;
 			numSyms++;
-			table[cToken] = 0; // unmark
+			table[cToken].mark = 0; // unmark
 			cToken++;
 		// continue to loop while the cToken is a comma
 		} while (list[cToken].tokenType == 17);
@@ -119,7 +119,7 @@ void genBlock(symbol *table, lexeme *list, instruction *code, int lex) {
 
 			cToken++;
 		// if following token is a procedure, continue
-		} while (list[cToken].tokenType == 30)
+		} while (list[cToken].tokenType == 30);
 	}
 
 	// update the sym tbl entry for this proc / M = current code index !
@@ -146,7 +146,7 @@ void genStatement(symbol *table, lexeme *list, instruction *code, int lex)
 		// save the location of the identifier in the symbol table
 		// tableIndex = getTableIndex(table, list[cToken].lexeme);
 
-		// save sym tbl ind of teh var entry unmarked and closest in lex lvl !
+		// save sym tbl ind of the var entry unmarked and closest in lex lvl !
 		cToken += 2;
 		genExpression(table, list, code, 0, lex);
 		emit("STO", 4, 0, table[tableIndex].level, table[tableIndex].addr, code);
@@ -227,7 +227,7 @@ void genStatement(symbol *table, lexeme *list, instruction *code, int lex)
 	if (list[cToken].tokenType == 31)
 	{
 		cToken++;
-		genExpression(table, list, code, lex);
+		genExpression(table, list, code, 0, lex); // pseudocode says nothing about the reg argument !
 		emit("WRITE", 9, 0, 0, 1, code);
 		cToken++;
 	}
