@@ -10,20 +10,20 @@ int errorFlag = 0;
 int size, cToken, iSymbol;
 
 // basic functions
-symbol* parse(lexeme *list, int size, int *symbolTableSize);
-void program(lexeme *list, symbol *table);
-void block(lexeme *list, symbol *table);
-void constDeclaration(lexeme *list, symbol *table);
-void varDeclaration(lexeme *list, symbol *table);
-void statement(lexeme *list, symbol *table);
-void condition(lexeme *list, symbol *table);
-void expression(lexeme *list, symbol *table);
-void term(lexeme *list, symbol *table);
-void factor(lexeme *list, symbol *table);
+symbol* parse           (lexeme *list, int size, int *symbolTableSize);
+void program            (lexeme *list, symbol *table);
+void block              (lexeme *list, symbol *table);
+void constDeclaration   (lexeme *list, symbol *table);
+void varDeclaration     (lexeme *list, symbol *table);
+void statement          (lexeme *list, symbol *table);
+void condition          (lexeme *list, symbol *table);
+void expression         (lexeme *list, symbol *table);
+void term               (lexeme *list, symbol *table);
+void factor             (lexeme *list, symbol *table);
 
 // helper functions
-int checkIdent(char* search, symbol* table);
-int isVar(char* search, symbol* table);
+int checkIdent  (char* search, symbol* table);
+int isVar       (char* search, symbol* table);
 
 //------------------------------------------------------------------------------
 symbol* parse(lexeme *list, int inputSize, int *symbolTableSize)

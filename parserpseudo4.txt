@@ -1,0 +1,178 @@
+// this was written by TA Noelle without direction or suggestion from
+// Professor Montagne, it is entirely possible that it contains errors
+// if you find an error or you have any questions, please email me at
+// noellemidkiff@knights.ucf.edu
+
+PROGRAM
+	add to symbol table (kind 3, "main", 0, lexlevel 0, m 0, unmarked)
+	BLOCK (0)
+	if token != .
+		error
+
+BLOCK (lexlevel)
+	numSymbols = 0;
+	numSymbols += CONST-DECLARATION (lexlevel)
+	numSymbols += VAR-DECLARATION (lexlevel)
+	numSymbols += PROCEDURE-DECLARATION (lexlevel + 1)
+	STATEMENT (lexlevel)
+	mark the last numSymbols number of unmarked symbols
+
+returns numConsts CONST-DECLARATION (lexlevel)
+	if token == const
+		do
+			get next token
+			if token != ident
+				error
+			save ident name
+			if the ident name is already in the symbol table unmarked and at the same lexlevel
+				error
+			get next token
+			if token != =
+				error
+			get next token
+			if token != number
+				error
+			add to the symbol table (kind 1, saved name, number is current token, lexlevel, m 0, unmarked)
+			get next token
+		while token == ,
+		if token != ;
+			error
+		get next token
+
+returns numVars VAR-DECLARATION (lexlevel)
+	if token == var
+		numVars = 0
+		do
+			numVars++
+			get next token
+			if token != ident
+				error
+			if the ident name is already in the symbol table unmarked and at the same lexlevel
+				error
+			add to symbol table (kind 2, name is current token, val 0, lexlevel, m var# + 2, unmarked)
+			get next token
+		while token == ,
+		if token != ;
+			error
+		get next token
+
+returns numProcedures PROCEDURE-DECLARATION (lexlevel)
+	if token == procedure
+		do
+			get next token
+			if token != ident
+				error
+			if ident is already in the symbol table unmarked and at the same level
+				error
+			add to the symbol table (kind 3, ident, val 0, lexlevel, m 0, unmarked)
+			get next token
+			if token != ;
+				error
+			get next token
+			BLOCK(lexlevel)
+			if token != ;
+				error
+			get next token
+		while token == procedure
+
+STATEMENT (lexlevel)
+	if token == ident
+		search the symbol table working backwards find the latest unmarked var with the desired name
+		if you can't find one
+			error
+		get next token
+		if token != :=
+			error
+		get next token
+		EXPRESSION (lexlevel)
+		return
+	if token == call
+		get next token
+		search the symbol table working backwards find the latest unmarked procedure with the desired
+		if you can't find one
+			error
+		get next token
+		return
+	if token == begin
+		get next token
+		STATEMENT (lexlevel)
+		while token == ;
+			get next token
+			STATEMENT (lexlevel)
+		if token != end
+			error
+		get next token
+		return
+	if token == if
+		get next token
+		CONDITION (lexlevel)
+		if token != then
+			error
+		get next token
+		STATEMENT (lexlevel)
+		if token == else
+			get next token
+			STATEMENT (lexlevel)
+		return
+	if token == while
+		get next token
+		CONDITION (lexlevel)
+		if token != do
+			error
+		get next token
+		STATEMENT (lexlevel)
+		return
+	if token == read
+		get next token
+		search the symbol table working backwards to find the latest unmarked var with the desired name
+		if you can't find one
+			error
+		get next token
+		return
+	if token == write
+		get next token
+		EXPRESSION (lexlevel)
+		return
+	return
+
+CONDITION (lexlevel)
+	if token == odd
+		get next token
+		EXPRESSION (lexlevel)
+	else
+		EXPRESSION (lexlevel)
+		if token != = <> < <= > >=
+			error
+		get next token
+		EXPRESSION (lexlevel)
+
+EXPRESSION (lexlevel)
+	if token == + -
+		get next token
+	TERM (lexlevel)
+	while token == + -
+		get next token
+		TERM (lexlevel)
+
+TERM (lexlevel)
+	FACTOR (lexlevel)
+	while token == * /
+		get next token
+		FACTOR (lexlevel)
+
+FACTOR (lexlevel)
+	if token == ident
+		search through the symbol table working backwards to find the latest unmarked var or const with the desired name
+		if you can't find one
+			error
+		get next token
+	else if token == number
+		get next token
+	else if token == (
+		get next token
+		EXPRESSION (lexlevel)
+		if token != )
+			error
+		get next token
+	else
+		error

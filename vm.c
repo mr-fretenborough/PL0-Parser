@@ -11,9 +11,9 @@ int stack[MAX_STACK_HEIGHT] = {0};
 int dynamicLinks[MAX_STACK_HEIGHT] = {0};
 
 // fucntion prototypes
-void virtual_machine(instruction *code, int lCode);
-int base(int L, int base);
-void printAssembly(instruction* code, int lCode);
+void virtual_machine  (instruction *code, int lCode);
+int base              (int L, int base);
+void printAssembly    (instruction* code, int lCode);
 
 //------------------------------------------------------------------------------
 void virtual_machine(instruction *code, int lCode) {
