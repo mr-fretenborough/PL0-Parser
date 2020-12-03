@@ -14,16 +14,16 @@ typedef struct instruction
 	int m;
 } instruction;
 
-instruction* generateCode(symbol *table, lexeme *list, int tableSize, int listSize, int *codeSize);
-void genProgram(symbol *table, lexeme *list, instruction *code);
-void genBlock(symbol *table, lexeme *list, instruction *code);
-void genStatement(symbol *table, lexeme *list, instruction *code);
-void genCondition(symbol *table, lexeme *list, instruction *code);
-void genExpression(symbol *table, lexeme *list, instruction *code, int reg);
-void genTerm(symbol *table, lexeme *list, instruction *code, int reg);
-void genFactor(symbol *table, lexeme *list, instruction *code, int reg);
-void emit(char *op, int opcode, int r, int l, int m, instruction *code);
-void addLineNum(instruction *code, int codeSize);
+instruction* generateCode  (symbol *table, lexeme *list, int tableSize, int listSize, int *codeSize);
+void genProgram            (symbol *table, lexeme *list, instruction *code);
+void genBlock              (symbol *table, lexeme *list, instruction *code, int lex);
+void genStatement          (symbol *table, lexeme *list, instruction *code, int lex);
+void genCondition          (symbol *table, lexeme *list, instruction *code, int lex);
+void genExpression         (symbol *table, lexeme *list, instruction *code, int reg, int lex);
+void genTerm               (symbol *table, lexeme *list, instruction *code, int reg, int lex);
+void genFactor             (symbol *table, lexeme *list, instruction *code, int reg, int lex);
+void emit                  (char *op, int opcode, int r, int l, int m, instruction *code);
+void addLineNum            (instruction *code, int codeSize);
 
 
 #endif
