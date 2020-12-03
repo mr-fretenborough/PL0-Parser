@@ -5,7 +5,7 @@
 
 PROGRAM
 	i = 1
-	foreach symbol in symboltable
+	for each symbol in symbol table
 		if symbol is procedure
 			symbol.value = i
 			i++
