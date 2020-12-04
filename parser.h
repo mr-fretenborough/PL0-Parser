@@ -13,15 +13,26 @@ typedef struct symbol
 	int mark;
 } symbol;
 
-symbol* parse(lexeme *list, int size, int *symbolTableSize);
-void program(lexeme *list, symbol *table);
-void block(lexeme *list, symbol *table);
-void constDeclaration(lexeme *list, symbol *table);
-void varDeclaration(lexeme *list, symbol *table);
-void statement(lexeme *list, symbol *table);
-void condition(lexeme *list, symbol *table);
-void expression(lexeme *list, symbol *table);
-void term(lexeme *list, symbol *table);
-void factor(lexeme *list, symbol *table);
+// basic functions
+symbol* parse           	(lexeme *list, int size, int *symbolTableSize);
+void program            	(lexeme *list, symbol *table);
+void block              	(lexeme *list, symbol *table, int lexLevel);
+int constDeclaration   		(lexeme *list, symbol *table, int lexLevel);
+int varDeclaration     		(lexeme *list, symbol *table, int lexLevel);
+void statement          	(lexeme *list, symbol *table, int lexLevel);
+void condition          	(lexeme *list, symbol *table, int lexLevel);
+void expression         	(lexeme *list, symbol *table, int lexLevel);
+void term               	(lexeme *list, symbol *table, int lexLevel);
+void factor             	(lexeme *list, symbol *table, int lexLevel);
+int procedureDeclaration	(lexeme *list, symbol *table, int lexLevel);
+int findIdent							(lexeme *list, symbol *table, int lexLevel, char *name);
+int findProc							(lexeme *list, symbol *table, int lexLevel, char *name);
+int findVarOrConst				(lexeme *list, symbol *table, int lexLevel, char *name);
+void markSymbols					(lexeme *list, symbol *table, int numSymbols);
+
+
+// helper functions
+int checkIdent  (char* search, symbol* table, int lexLevel);
+int isVar       (char* search, symbol* table);
 
 #endif
