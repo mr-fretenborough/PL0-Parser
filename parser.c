@@ -61,6 +61,7 @@ void program(lexeme *list, symbol *table) {
 	iSymbol++;
 
 	block(list, table, 0);
+
 	if (cToken > size || list[cToken].tokenType != 19) {
 		errorFlag = 1;
 		printf("ERROR NUMBER 5: Period expected\n");
@@ -153,8 +154,12 @@ int varDeclaration(lexeme *list, symbol *table, int lexLevel) {
 		qVar = 2;
 		do {
 			qVar++;
+
+			// grab the next token
+			cToken++;
+
 			// if following token is not an ident, raise error
-			if (cToken >= size || list[++cToken].tokenType != 2) {
+			if (cToken >= size || list[cToken].tokenType != 2) {
 				printf("ERROR NUMBER 3: const, var, procedure must be followed by identifier.\n");
 				exit(0);
 			// if following token is not a duplicate
@@ -170,7 +175,7 @@ int varDeclaration(lexeme *list, symbol *table, int lexLevel) {
 				numVars++;
 				iSymbol++;
 				cToken++;
-			} else if (checkIdent(list[cToken].lexeme, table, lexLevel)) {
+			} else {
 				// there is a duplicate value, print error and exit
 				printf("ERROR NUMBER 15: Identifier \"%s\" has already been declared.\n", list[cToken].lexeme);
 				exit(0);
@@ -252,10 +257,10 @@ int procedureDeclaration(lexeme *list, symbol *table, int lexLevel)
 int checkIdent(char* search, symbol* table, int lexLevel) {
 	// check to see if ident is already in the table
 	for (int i = 0; i < iSymbol; i++) {
-		if (strcmp(search, table[i].name) == 0 && table[i].level == lexLevel && table[i].mark == 0) {
-			// there is a duplicate value, return true (1)
+		// there is a duplicate value, return true (1)
+		if (strcmp(search, table[i].name) == 0 && table[i].level == lexLevel && table[i].mark == 0)
 			return 1;
-		}
+
 	}
 	// no duplicates, return false (0)
 	return 0;
@@ -495,7 +500,7 @@ int findIdent(lexeme *list, symbol *table, int lexLevel, char *name)
 	int i = 0;
 
 	// loop through the symbol table backwards and find the latest
-	for (i = iSymbol - 1; i >= 0; i++)
+	for (i = iSymbol - 1; i >= 0; i--)
 	{
 		// if current table entry has the same name, is a var, and is unmarked then return true
 		if (strcmp(table[i].name, name) == 0 && table[i].kind == 2 && table[i].mark == 0)
@@ -509,7 +514,7 @@ int findProc(lexeme *list, symbol *table, int lexLevel, char *name)
 	int i = 0;
 
 	// loop through the symbol table backwards and find the latest
-	for (i = iSymbol - 1; i >= 0; i++)
+	for (i = iSymbol - 1; i >= 0; i--)
 	{
 		// if current table entry has the same name, is a var, and is unmarked then return true
 		if (strcmp(table[i].name, name) == 0 && table[i].kind == 3 && table[i].mark == 0)
@@ -523,7 +528,7 @@ int findVarOrConst(lexeme *list, symbol *table, int lexLevel, char *name)
 	int i = 0;
 
 	// loop through the symbol table backwards and find the latest
-	for (i = iSymbol - 1; i >= 0; i++)
+	for (i = iSymbol - 1; i >= 0; i--)
 	{
 		// if current table entry has the same name, is a var, and is unmarked then return true
 		if (strcmp(table[i].name, name) == 0 && (table[i].kind == 2 || table[i].kind == 1) && table[i].mark == 0)
