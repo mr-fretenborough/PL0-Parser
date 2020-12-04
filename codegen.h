@@ -16,7 +16,7 @@ typedef struct instruction
 
 instruction* generateCode  (symbol *table, lexeme *list, int tableSize, int listSize, int *codeSize);
 void genProgram            (symbol *table, lexeme *list, instruction *code);
-void genBlock              (symbol *table, lexeme *list, instruction *code, int lex);
+void genBlock              (symbol *table, lexeme *list, instruction *code, int lex, int ProcedureIndex);
 void genStatement          (symbol *table, lexeme *list, instruction *code, int lex);
 void genCondition          (symbol *table, lexeme *list, instruction *code, int lex);
 void genExpression         (symbol *table, lexeme *list, instruction *code, int reg, int lex);

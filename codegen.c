@@ -8,12 +8,12 @@
 
 // tSize is the size of the symbol table, lsize is the size of the lexeme list,
 // and cx is the current index of the code array
-int tSize, lSize, cSize, cx, cToken;
+int tSize, lSize, cx, cToken;
 
 // basic functions
 instruction* generateCode (symbol *table, lexeme *list, int tableSize, int listSize, int *codeSize);
 void genProgram           (symbol *table, lexeme *list, instruction *code);
-void genBlock             (symbol *table, lexeme *list, instruction *code, int lex);
+void genBlock             (symbol *table, lexeme *list, instruction *code, int lex, int ProcedureIndex);
 void genStatement         (symbol *table, lexeme *list, instruction *code, int lex);
 void genCondition         (symbol *table, lexeme *list, instruction *code, int lex);
 void genExpression        (symbol *table, lexeme *list, instruction *code, int reg, int lex);
@@ -22,6 +22,12 @@ void genFactor            (symbol *table, lexeme *list, instruction *code, int r
 void emit                 (char *op, int opcode, int r, int l, int m, instruction *code);
 int getTableIndex         (symbol *table, char *target);
 void addLineNum           (instruction *code, int codeSize);
+int findProcedureM				(symbol *table, int codeM);
+int findConstantIndex			(symbol* table, char* name, int lex);
+int getSymIndex						(symbol *table, char* name, int type, int lex);
+int findVarIndex					(symbol* table, char* name, int lex);
+int findProcIndex					(symbol* table, char* name, int lex);
+int findUnmarked					(symbol *table, char* name, int lex);
 
 
 //------------------------------------------------------------------------------
@@ -31,7 +37,6 @@ instruction* generateCode(symbol *table, lexeme *list, int tableSize, int listSi
 
 	tSize = tableSize;
 	lSize = listSize;
-	cSize = &codeSize;
 	cToken = 0;
 	cx = 0;
 
@@ -45,27 +50,29 @@ instruction* generateCode(symbol *table, lexeme *list, int tableSize, int listSi
 void genProgram(symbol *table, lexeme *list, instruction *code) {
 	int i = 1;
 	int qProc = 0;
+	int tempProcedureM = 0;
 	// for each sym in sym tbl
 	for (int i = 0; i < tSize; i++) {
 		// if the sym is a proc, identify
-		if (table[i].kind == 30) {
+		if (table[i].kind == 3) {
 			table[i].val = ++qProc;
 			emit("JMP", 7, 0, 0, 0, code);
+			code[cx - 1].m = table[i].addr;
 		}
 	}
 
-	genBlock(table, list, code, 0);
-	// tbh i dont get this code
-	for (i = 0; code[i].opcode == 7; i++) {
-		code[i].m = 1; // replace 1 "the m from that proc's sym tbl entry" !
-	}
+	genBlock(table, list, code, 0, 0);
+	// // tbh i dont get this code
+	// for (i = 0; code[i].opcode == 7; i++) {
+	// 	code[i].m = 1; // replace 1 "the m from that proc's sym tbl entry" !
+	// }
 
 	// for each line of code
-	for (i = 0; i < cSize; i++) {
-		// if the line makes a proc call
+	for (i = 0; i < cx; i++) {
+		// if the line makes a procedure call
 		if (code[i].opcode == 5) {
-			// find table[?].kind w value == code[i].m !
-			// code[i].m = table[?].addr | the m value from that sym tbl entry !
+			 tempProcedureM = findProcedureM(table, code[i].m);
+			 code[i].m = tempProcedureM;
 		}
 	}
 
@@ -73,16 +80,17 @@ void genProgram(symbol *table, lexeme *list, instruction *code) {
 
 }
 //------------------------------------------------------------------------------
-void genBlock(symbol *table, lexeme *list, instruction *code, int lex) {
+void genBlock(symbol *table, lexeme *list, instruction *code, int lex, int ProcedureIndex) {
 	int numVars = 0;
 	int numSyms = 0;
+	int tempProcedureIndex = 0;
 
 	// if the current token is a const
 	if (list[cToken].tokenType == 28) {
 		do {
 			cToken++;
 			numSyms++;
-			table[cToken].mark = 0; // unmark
+			table[findConstantIndex(table, list[cToken].lexeme, lex)].mark = 0; // unmark
 			cToken += 3;
 		// keep moving token by 4 while cToken is a comma
 		} while (list[cToken].tokenType == 17);
@@ -97,7 +105,7 @@ void genBlock(symbol *table, lexeme *list, instruction *code, int lex) {
 			cToken++;
 			numVars++;
 			numSyms++;
-			table[cToken].mark = 0; // unmark
+			table[findVarIndex(table, list[cToken].lexeme, lex)].mark = 0; // unmark
 			cToken++;
 		// continue to loop while the cToken is a comma
 		} while (list[cToken].tokenType == 17);
@@ -111,26 +119,29 @@ void genBlock(symbol *table, lexeme *list, instruction *code, int lex) {
 		do {
 			cToken++;
 			numSyms++;
-			table[cToken].mark = 0; // unmark
+			tempProcedureIndex = findProcIndex(table, list[cToken].lexeme, lex);
+			table[tempProcedureIndex].mark = 0; // unmark !
 			cToken += 2;
 
-			genBlock(table, list, code, lex + 1);
+			genBlock(table, list, code, lex + 1, tempProcedureIndex);
 			emit("RTN", 2, 0, 0, 0, code);
 
 			cToken++;
 		// if following token is a procedure, continue
 		} while (list[cToken].tokenType == 30);
+
+
 	}
 
 	// update the sym tbl entry for this proc / M = current code index !
+	table[ProcedureIndex].addr = cx;
 	// table[cToken].addr = cToken; *not sure
+
 	emit("INC", 6, 0, 0, 3 + numVars, code);
 	genStatement(table, list, code, lex);
 
 	// mark the last numSyms number of unmarked syms
-	for (int i = 0; i < numSyms; i++) {
-		table[cToken - i].mark = 1;
-	}
+	markSymbols(list, table, numSyms);
 }
 //------------------------------------------------------------------------------
 void genStatement(symbol *table, lexeme *list, instruction *code, int lex)
@@ -146,7 +157,8 @@ void genStatement(symbol *table, lexeme *list, instruction *code, int lex)
 		// save the location of the identifier in the symbol table *old
 		// tableIndex = getTableIndex(table, list[cToken].lexeme); *old
 
-		// save sym tbl ind of the var entry unmarked and closest in lex lvl !
+		// save sym tbl ind of the var entry unmarked and closest in lex lvl
+		tableIndex = findUnmarked(table, list[cToken].lexeme, lex);
 
 		cToken += 2;
 		genExpression(table, list, code, 0, lex);
@@ -155,8 +167,11 @@ void genStatement(symbol *table, lexeme *list, instruction *code, int lex)
 	// if the token is a call
 	if (list[cToken].tokenType == 27) {
 		cToken++;
-		// save the sym tbl ind of the proc entry unmarked and closest in lex level !
-		emit("CAL", 5, 0, table[tableIndex].level, table[tableIndex].addr, code);
+
+		// save the sym tbl ind of the proc entry unmarked and closest in lex level
+		tableIndex = findUnmarked(table, list[cToken].lexeme, lex);
+
+		emit("CAL", 5, 0, lex - table[tableIndex].level, table[tableIndex].val, code);
 		cToken++;
 	}
 	// if the token is begin
@@ -177,8 +192,8 @@ void genStatement(symbol *table, lexeme *list, instruction *code, int lex)
 	{
 		cToken++;
 		genCondition(table, list, code, lex);
-		// codeIndex = cx; *not noelle
 		// save the code index for jpc !
+		codeIndexForCondition = cx; // !
 		emit("JPC", 8, 0, 0, 0, code);
 		cToken++;
 		genStatement(table, list, code, lex);
@@ -187,13 +202,17 @@ void genStatement(symbol *table, lexeme *list, instruction *code, int lex)
 		if (list[cToken].tokenType == 33) {
 			cToken++;
 			// save the current code index for JMP !
+			codeIndexForJump = cx;
 			emit("JMP", 7, 0, 0, 0, code);
 			// fix the jpc form earlier | savedCodeIndexForJPC.M = currentCodeIndex !
+			code[codeIndexForCondition].m = cx;
 			genStatement(table, list, code, lex);
-			// fix the jpc from earlier | savedCodeIndexForJPC.M = currentCodeIndex !
+			// fix the jpc from earlier | savedCodeIndexForJMP.M = currentCodeIndex !
+			code[codeIndexForJump].m = cx;
 		// if there is no "else" keyword
 		} else {
 			// fix the jpc from earlier | savedCodeIndexForJPC.M = currentCodeIndex !
+			code[codeIndexForCondition].m = cx;
 		}
 	}
 	// if the token is a while
@@ -220,9 +239,11 @@ void genStatement(symbol *table, lexeme *list, instruction *code, int lex)
 		cToken++;
 		// tableIndex = getTableIndex(table, list[cToken].lexeme); *not noelle
 		// save the sym tbl ind of the var entry unmarked and closest to the cur lex lvl !
+		tableIndex = findUnmarked(table, list[cToken].lexeme, lex);
+
 		cToken++;
 		emit("SYS", 9, 0, 0, 2, code);
-		emit("STO", 4, 0, table[tableIndex].level, table[tableIndex].addr, code);
+		emit("STO", 4, 0, lex - table[tableIndex].level, table[tableIndex].addr, code);
 	}
 	// if token is write
 	if (list[cToken].tokenType == 31)
@@ -314,7 +335,7 @@ void genExpression(symbol *table, lexeme *list, instruction *code, int reg, int 
 			if (list[cToken].tokenType == 4)
 			{
 				cToken++;
-				genTerm(table, list, code, reg, lex);
+				genTerm(table, list, code, reg + 1, lex);
 				emit("ADD", 11, reg, reg, reg + 1, code);
 			}
 			// if the token is a "-"
@@ -383,6 +404,7 @@ void genFactor(symbol *table, lexeme *list, instruction *code, int reg, int lex)
 		// tableIndex = getTableIndex(table, list[cToken].lexeme); *old
 
 		// save the sym tbl ind of the var/const entry unmark and closest in lex lexlevel !
+		tableIndex = findUnmarked(table, list[cToken].lexeme, lex);
 
 		// if the token is a const
 		if (table[tableIndex].kind == 1)
@@ -392,7 +414,7 @@ void genFactor(symbol *table, lexeme *list, instruction *code, int reg, int lex)
 		// if the token is a var
 		if (table[tableIndex].kind == 2)
 		{
-			emit("LOD", 3, reg, table[tableIndex].level, table[tableIndex].addr, code);
+			emit("LOD", 3, reg, lex - table[tableIndex].level, table[tableIndex].addr, code);
 		}
 
 		cToken++;
@@ -438,7 +460,18 @@ int getTableIndex(symbol *table, char *target)
 	return 0;
 }
 //------------------------------------------------------------------------------
-// takes a token type and lex level and finds unmarked sym + closest in lex
+// this is a modular version of the getVar, getConst, and getProc
+int getSymIndex(symbol *table, char* name, int type, int lex)
+{
+	for (int i = 0; i < tSize; i++) {
+		if (strcmp(table[i].name, name) == 0 && table[i].level == lex && table[i].kind == type)
+			return i;
+		else
+			printf("ERROR: Codegen failed to find symbol (getSym)\n");
+	}
+}
+//------------------------------------------------------------------------------
+// takes a token name and lex level and finds unmarked sym + closest in lex
 // you want local x, not global x
 int findUnmarked(symbol *table, char* name, int lex)
 {
@@ -446,15 +479,16 @@ int findUnmarked(symbol *table, char* name, int lex)
 	int closest = -1;
 
 	for (int i = 0; i < tSize; i++) {
-		if (strcmp(table[i].name, name) == 0) {
-			if (table[i].level > closest) {
-				if (table[i].mark == 0) {
+		if (strcmp(table[i].name, name) == 0)
+			if (table[i].mark == 0)
+				if (table[i].level > closest && table[i].level <= lex) {
 					closest = table[i].level;
 					index = i;
 				}
-			}
-		}
 	}
+
+	if (index == -1 || closest == -1)
+		printf("ERROR: Codegen failed to find symbol (findUnmark)\n");
 
 	return index;
 }
@@ -464,4 +498,40 @@ void addLineNum(instruction *code, int codeSize)
 	int i;
 	for (i = 0; i < codeSize; i++)
 		code[i].lineNum = i;
+}
+//------------------------------------------------------------------------------
+int findProcedureM(symbol *table, int codeM)
+{
+	int i;
+
+	for (i = 0; i < tSize; i++)
+		if (table[i].kind == 3 && table[i].val == codeM)
+			return table[i].addr;
+}
+//------------------------------------------------------------------------------
+int findConstantIndex(symbol* table, char* name, int lex) {
+	for (int i = 0; i < tSize; i++) {
+		if (strcmp(table[i].name, name) == 0 && table[i].level == lex && table[i].kind == 1)
+			return i;
+		else
+			printf("ERROR: Codegen failed to find symbol (findConst)\n");
+	}
+}
+//------------------------------------------------------------------------------
+int findVarIndex(symbol* table, char* name, int lex) {
+	for (int i = 0; i < tSize; i++) {
+		if (strcmp(table[i].name, name) == 0 && table[i].level == lex && table[i].kind == 2)
+			return i;
+		else
+			printf("ERROR: Codegen failed to find symbol (findVar)\n");
+	}
+}
+//------------------------------------------------------------------------------
+int findProcIndex(symbol* table, char* name, int lex) {
+	for (int i = 0; i < tSize; i++) {
+		if (strcmp(table[i].name, name) == 0 && table[i].level == lex && table[i].kind == 3)
+			return i;
+		else
+			printf("ERROR: Codegen failed to find symbol (findProc)\n");
+	}
 }

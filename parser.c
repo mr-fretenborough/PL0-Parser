@@ -74,7 +74,7 @@ void block(lexeme *list, symbol *table, int lexLevel) {
 	// iterate through the list, looking for const, var, and stmts
 	numSymbols += constDeclaration(list, table, lexLevel);
 	numSymbols += varDeclaration(list, table, lexLevel);
-	numSymbols += procedureDeclaration(list, table, lexLevel + 1);
+	numSymbols += procedureDeclaration(list, table, lexLevel);
 	statement(list, table, lexLevel);
 	// IMPORTANT MARK THE LAST numSymbols of unmared symbols
 	markSymbols(list, table, numSymbols);
@@ -237,7 +237,7 @@ int procedureDeclaration(lexeme *list, symbol *table, int lexLevel)
 			cToken++;
 
 			// call block at this lex level
-			block(list, table, lexLevel);
+			block(list, table, lexLevel + 1);
 
 			// make sure the next token is a ";"
 			if (cToken >= size || list[cToken].tokenType != 18) {
