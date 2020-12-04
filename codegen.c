@@ -20,14 +20,14 @@ void genExpression        (symbol *table, lexeme *list, instruction *code, int r
 void genTerm              (symbol *table, lexeme *list, instruction *code, int reg, int lex);
 void genFactor            (symbol *table, lexeme *list, instruction *code, int reg, int lex);
 void emit                 (char *op, int opcode, int r, int l, int m, instruction *code);
-int getTableIndex         (symbol *table, char *target);
+int  getTableIndex        (symbol *table, char *target);
 void addLineNum           (instruction *code, int codeSize);
-int findProcedureM				(symbol *table, int codeM);
-int findConstantIndex			(symbol* table, char* name, int lex);
-int getSymIndex						(symbol *table, char* name, int type, int lex);
-int findVarIndex					(symbol* table, char* name, int lex);
-int findProcIndex					(symbol* table, char* name, int lex);
-int findUnmarked					(symbol *table, char* name, int lex);
+int  findProcedureM       (symbol *table, int codeM);
+int  findConstantIndex    (symbol* table, char* name, int lex);
+int  getSymIndex          (symbol *table, char* name, int type, int lex);
+int  findVarIndex         (symbol* table, char* name, int lex);
+int  findProcIndex        (symbol* table, char* name, int lex);
+int  findUnmarked         (symbol *table, char* name, int lex);
 
 
 //------------------------------------------------------------------------------
@@ -42,12 +42,15 @@ instruction* generateCode(symbol *table, lexeme *list, int tableSize, int listSi
 
 	genProgram(table, list, code);
 
+
 	*codeSize = cx;
 	addLineNum(code, cx);
 	return code;
 }
 //------------------------------------------------------------------------------
 void genProgram(symbol *table, lexeme *list, instruction *code) {
+
+
 	int i = 1;
 	int qProc = 0;
 	int tempProcedureM = 0;
@@ -57,15 +60,20 @@ void genProgram(symbol *table, lexeme *list, instruction *code) {
 		if (table[i].kind == 3) {
 			table[i].val = ++qProc;
 			emit("JMP", 7, 0, 0, 0, code);
-			code[cx - 1].m = table[i].addr;
+			// code[cx - 1].m = table[i].addr;
 		}
 	}
 
+
+
 	genBlock(table, list, code, 0, 0);
-	// // tbh i dont get this code
-	// for (i = 0; code[i].opcode == 7; i++) {
-	// 	code[i].m = 1; // replace 1 "the m from that proc's sym tbl entry" !
-	// }
+	// tbh i dont get this code
+	for (int i = 0; i < cx; i++) {
+		if (code[i].opcode == 7) {
+			code[i].m = 0; // replace 1 "the m from that proc's sym tbl entry" !
+		}
+	}
+
 
 	// for each line of code
 	for (i = 0; i < cx; i++) {
@@ -466,9 +474,12 @@ int getSymIndex(symbol *table, char* name, int type, int lex)
 	for (int i = 0; i < tSize; i++) {
 		if (strcmp(table[i].name, name) == 0 && table[i].level == lex && table[i].kind == type)
 			return i;
-		else
-			printf("ERROR: Codegen failed to find symbol (getSym)\n");
 	}
+
+	// if at this point, no sym found
+	printf("ERROR: Codegen failed to find the symbol (getSym)\n");
+	return 0;
+
 }
 //------------------------------------------------------------------------------
 // takes a token name and lex level and finds unmarked sym + closest in lex
@@ -513,25 +524,27 @@ int findConstantIndex(symbol* table, char* name, int lex) {
 	for (int i = 0; i < tSize; i++) {
 		if (strcmp(table[i].name, name) == 0 && table[i].level == lex && table[i].kind == 1)
 			return i;
-		else
-			printf("ERROR: Codegen failed to find symbol (findConst)\n");
 	}
+
+	// if at this point, no sym found
+	printf("ERROR: Codegen failed to find the symbol (findConst)\n");
+	return 0;
 }
 //------------------------------------------------------------------------------
 int findVarIndex(symbol* table, char* name, int lex) {
 	for (int i = 0; i < tSize; i++) {
 		if (strcmp(table[i].name, name) == 0 && table[i].level == lex && table[i].kind == 2)
 			return i;
-		else
-			printf("ERROR: Codegen failed to find symbol (findVar)\n");
 	}
+	printf("ERROR: Codegen failed to find symbol (findVar)\n");
+	return 0;
 }
 //------------------------------------------------------------------------------
 int findProcIndex(symbol* table, char* name, int lex) {
 	for (int i = 0; i < tSize; i++) {
 		if (strcmp(table[i].name, name) == 0 && table[i].level == lex && table[i].kind == 3)
 			return i;
-		else
-			printf("ERROR: Codegen failed to find symbol (findProc)\n");
 	}
+	printf("ERROR: Codegen failed to find symbol (findProc)\n");
+	return 0;
 }

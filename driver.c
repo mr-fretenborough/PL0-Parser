@@ -94,6 +94,8 @@ int main(int argc, char **argv)
 		printAssembly(code, codeLength);
 	}
 
+	
+
 	// check to see if the user wants to print the assembly execution
 	if (vFlag)
 		virtual_machine(code, codeLength);
