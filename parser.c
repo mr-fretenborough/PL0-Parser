@@ -23,6 +23,8 @@ void factor             	(lexeme *list, symbol *table, int lexLevel);
 int procedureDeclaration	(lexeme *list, symbol *table, int lexLevel);
 int findIdent							(lexeme *list, symbol *table, int lexLevel, char *name);
 int findProc							(lexeme *list, symbol *table, int lexLevel, char *name);
+int findVarOrConst				(lexeme *list, symbol *table, int lexLevel, char *name);
+void markSymbols					(lexeme *list, symbol *table, int numSymbols);
 
 
 
@@ -71,13 +73,15 @@ void block(lexeme *list, symbol *table, int lexLevel) {
 	// iterate through the list, looking for const, var, and stmts
 	numSymbols += constDeclaration(list, table, lexLevel);
 	numSymbols += varDeclaration(list, table, lexLevel);
-	numSymbols += procedureDeclaration(list, table, lexLevel);
+	numSymbols += procedureDeclaration(list, table, lexLevel + 1);
 	statement(list, table, lexLevel);
 	// IMPORTANT MARK THE LAST numSymbols of unmared symbols
+	markSymbols(list, table, numSymbols);
 }
 //------------------------------------------------------------------------------
 // handles constant declaration error detection
 int constDeclaration(lexeme *list, symbol *table, int lexLevel) {
+	int numConsts = 0;
 	char string[12] = {""};
 
 	// if we find a const statement we must extract the information
@@ -123,6 +127,7 @@ int constDeclaration(lexeme *list, symbol *table, int lexLevel) {
 			table[iSymbol].mark = 0;
 			iSymbol++;
 			cToken++;
+			numConsts++;
 
 		} while (list[cToken].tokenType == 17); // checks for another const
 
@@ -133,12 +138,14 @@ int constDeclaration(lexeme *list, symbol *table, int lexLevel) {
 		} else {
 			cToken++;
 		}
-
 	}
+
+	return numConsts;
 }
 //------------------------------------------------------------------------------
 // handles variable declaration error detection
 int varDeclaration(lexeme *list, symbol *table, int lexLevel) {
+	int numVars = 0;
 	int qVar = 0;
 	// if token is a var, process following tokens
 	if (cToken < size && list[cToken].tokenType == 29) {
@@ -160,6 +167,7 @@ int varDeclaration(lexeme *list, symbol *table, int lexLevel) {
 				table[iSymbol].addr = qVar;
 				table[iSymbol].mark = 0;
 				// increment table index
+				numVars++;
 				iSymbol++;
 				cToken++;
 			} else if (checkIdent(list[cToken].lexeme, table, lexLevel)) {
@@ -178,11 +186,12 @@ int varDeclaration(lexeme *list, symbol *table, int lexLevel) {
 			cToken++;
 		}
 	}
-	return qVar;
+	return numVars;
 }
 //------------------------------------------------------------------------------
 int procedureDeclaration(lexeme *list, symbol *table, int lexLevel)
 {
+	int numProcs = 0;
 	// if the token is a procedure
 	if (list[cToken].tokenType == 30)
 	{
@@ -197,7 +206,7 @@ int procedureDeclaration(lexeme *list, symbol *table, int lexLevel)
 			}
 
 			// if the ident is already in the symbol table and unmarked at the same lexLevel then throw error
-			if (checkIdent(list[cToken].lexeme, table, lexLevel) {
+			if (checkIdent(list[cToken].lexeme, table, lexLevel)) {
 				printf("ERROR NUMBER 15: Identifier \"%s\" has already been declared.\n", list[cToken].lexeme);
 				exit(0);
 			}
@@ -209,6 +218,7 @@ int procedureDeclaration(lexeme *list, symbol *table, int lexLevel)
 			table[iSymbol].level = lexLevel;
 			table[iSymbol].addr = 0;
 			table[iSymbol].mark = 0;
+			numProcs++;
 			iSymbol++;
 			cToken++;
 
@@ -234,6 +244,8 @@ int procedureDeclaration(lexeme *list, symbol *table, int lexLevel)
 			cToken++;
 		} while (list[cToken].tokenType == 30);
 	}
+
+	return numProcs;
 }
 //------------------------------------------------------------------------------
 // checks for existence of symbol, return boolean (0-no dupe, 1-dupe)
@@ -518,4 +530,23 @@ int findVarOrConst(lexeme *list, symbol *table, int lexLevel, char *name)
 			return 1;
 	}
 	return 0;
+}
+//------------------------------------------------------------------------------
+void markSymbols(lexeme *list, symbol *table, int numSymbols)
+{
+	int i = iSymbol - 1;
+	int cnt = 0;
+
+	while (cnt != numSymbols)
+	{
+		if (i < 0)
+			break;
+
+		if (table[i].mark == 0)
+		{
+			table[i].mark = 1;
+			cnt++;
+		}
+		i--;
+	}
 }
