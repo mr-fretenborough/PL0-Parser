@@ -49,9 +49,10 @@ instruction* generateCode(symbol *table, lexeme *list, int tableSize, int listSi
 }
 //------------------------------------------------------------------------------
 void genProgram(symbol *table, lexeme *list, instruction *code) {
-
+	int array[CODE_SIZE];
 
 	int i = 1;
+	int arrayIndex = 0;
 	int qProc = 0;
 	int tempProcedureM = 0;
 	// for each sym in sym tbl
@@ -60,20 +61,18 @@ void genProgram(symbol *table, lexeme *list, instruction *code) {
 		if (table[i].kind == 3) {
 			table[i].val = ++qProc;
 			emit("JMP", 7, 0, 0, 0, code);
+			array[arrayIndex++] = i;
 			// code[cx - 1].m = table[i].addr;
 		}
 	}
 
 	genBlock(table, list, code, 0, 0);
 
-	// tbh i dont get this code
-	for (i = 0; i < tSize; i++)
-		if (table[i].kind == 3)
-			printf("%s :: %d\n", table[i].name, table[i].addr);
+	arrayIndex = 0;
 
 	for (int i = 0; i < cx; i++) {
 		if (code[i].opcode == 7) {
-			code[i].m = 0; // replace 1 "the m from that proc's sym tbl entry" !
+			code[i].m = table[array[arrayIndex++]].addr; // replace 1 "the m from that proc's sym tbl entry" !
 		}
 	}
 
