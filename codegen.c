@@ -64,10 +64,13 @@ void genProgram(symbol *table, lexeme *list, instruction *code) {
 		}
 	}
 
-
-
 	genBlock(table, list, code, 0, 0);
+
 	// tbh i dont get this code
+	for (i = 0; i < tSize; i++)
+		if (table[i].kind == 3)
+			printf("%s :: %d\n", table[i].name, table[i].addr);
+
 	for (int i = 0; i < cx; i++) {
 		if (code[i].opcode == 7) {
 			code[i].m = 0; // replace 1 "the m from that proc's sym tbl entry" !
@@ -498,6 +501,7 @@ int findUnmarked(symbol *table, char* name, int lex)
 				}
 	}
 
+	// if index/closest remain unchanged, then no symbol found that fits criteria
 	if (index == -1 || closest == -1)
 		printf("ERROR: Codegen failed to find symbol (findUnmark)\n");
 
@@ -518,6 +522,10 @@ int findProcedureM(symbol *table, int codeM)
 	for (i = 0; i < tSize; i++)
 		if (table[i].kind == 3 && table[i].val == codeM)
 			return table[i].addr;
+
+	// if at this point, throw error bc no address found
+	printf("ERROR: Codegen failed to find procedure address (findProcM)\n");
+	return 0;
 }
 //------------------------------------------------------------------------------
 int findConstantIndex(symbol* table, char* name, int lex) {
