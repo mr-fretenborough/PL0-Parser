@@ -143,10 +143,11 @@ void genStatement(symbol *table, lexeme *list, instruction *code, int lex)
 	// if the token is an identifier
 	if (list[cToken].tokenType == 2)
 	{
-		// save the location of the identifier in the symbol table
-		// tableIndex = getTableIndex(table, list[cToken].lexeme);
+		// save the location of the identifier in the symbol table *old
+		// tableIndex = getTableIndex(table, list[cToken].lexeme); *old
 
 		// save sym tbl ind of the var entry unmarked and closest in lex lvl !
+
 		cToken += 2;
 		genExpression(table, list, code, 0, lex);
 		emit("STO", 4, 0, table[tableIndex].level, table[tableIndex].addr, code);
@@ -227,9 +228,8 @@ void genStatement(symbol *table, lexeme *list, instruction *code, int lex)
 	if (list[cToken].tokenType == 31)
 	{
 		cToken++;
-		genExpression(table, list, code, 0, lex); // pseudocode says nothing about the reg argument !
+		genExpression(table, list, code, 0, lex); // pretty sure reg is supposed to be 0
 		emit("WRITE", 9, 0, 0, 1, code);
-		cToken++;
 	}
 }
 //------------------------------------------------------------------------------
@@ -436,6 +436,27 @@ int getTableIndex(symbol *table, char *target)
 			return i;
 	}
 	return 0;
+}
+//------------------------------------------------------------------------------
+// takes a token type and lex level and finds unmarked sym + closest in lex
+// you want local x, not global x
+int findUnmarked(symbol *table, char* name, int lex)
+{
+	int index = -1;
+	int closest = -1;
+
+	for (int i = 0; i < tSize; i++) {
+		if (strcmp(table[i].name, name) == 0) {
+			if (table[i].level > closest) {
+				if (table[i].mark == 0) {
+					closest = table[i].level;
+					index = i;
+				}
+			}
+		}
+	}
+
+	return index;
 }
 //------------------------------------------------------------------------------
 void addLineNum(instruction *code, int codeSize)
