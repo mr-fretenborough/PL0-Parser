@@ -62,7 +62,6 @@ void genProgram(symbol *table, lexeme *list, instruction *code) {
 			table[i].val = ++qProc;
 			emit("JMP", 7, 0, 0, 0, code);
 			array[arrayIndex++] = i;
-			// code[cx - 1].m = table[i].addr;
 		}
 	}
 
@@ -72,7 +71,7 @@ void genProgram(symbol *table, lexeme *list, instruction *code) {
 
 	for (int i = 0; i < cx; i++) {
 		if (code[i].opcode == 7) {
-			code[i].m = table[array[arrayIndex++]].addr; // replace 1 "the m from that proc's sym tbl entry" !
+			code[i].m = table[array[arrayIndex++]].addr;
 		}
 	}
 
@@ -130,7 +129,7 @@ void genBlock(symbol *table, lexeme *list, instruction *code, int lex, int Proce
 			cToken++;
 			numSyms++;
 			tempProcedureIndex = findProcIndex(table, list[cToken].lexeme, lex);
-			table[tempProcedureIndex].mark = 0; // unmark !
+			table[tempProcedureIndex].mark = 0; // unmark
 			cToken += 2;
 
 			genBlock(table, list, code, lex + 1, tempProcedureIndex);
@@ -139,13 +138,8 @@ void genBlock(symbol *table, lexeme *list, instruction *code, int lex, int Proce
 			cToken++;
 		// if following token is a procedure, continue
 		} while (list[cToken].tokenType == 30);
-
-
 	}
-
-	// update the sym tbl entry for this proc / M = current code index !
 	table[ProcedureIndex].addr = cx;
-	// table[cToken].addr = cToken; *not sure
 
 	emit("INC", 6, 0, 0, 3 + numVars, code);
 	genStatement(table, list, code, lex);
@@ -164,15 +158,13 @@ void genStatement(symbol *table, lexeme *list, instruction *code, int lex)
 	// if the token is an identifier
 	if (list[cToken].tokenType == 2)
 	{
-		// save the location of the identifier in the symbol table *old
-		// tableIndex = getTableIndex(table, list[cToken].lexeme); *old
-
 		// save sym tbl ind of the var entry unmarked and closest in lex lvl
 		tableIndex = findUnmarked(table, list[cToken].lexeme, lex);
 
 		cToken += 2;
 		genExpression(table, list, code, 0, lex);
-		emit("STO", 4, 0, table[tableIndex].level, table[tableIndex].addr, code);
+
+		emit("STO", 4, 0, lex - table[tableIndex].level, table[tableIndex].addr, code); // STO2
 	}
 	// if the token is a call
 	if (list[cToken].tokenType == 27) {
@@ -202,8 +194,7 @@ void genStatement(symbol *table, lexeme *list, instruction *code, int lex)
 	{
 		cToken++;
 		genCondition(table, list, code, lex);
-		// save the code index for jpc !
-		codeIndexForCondition = cx; // !
+		codeIndexForCondition = cx;
 		emit("JPC", 8, 0, 0, 0, code);
 		cToken++;
 		genStatement(table, list, code, lex);
@@ -211,17 +202,13 @@ void genStatement(symbol *table, lexeme *list, instruction *code, int lex)
 		// if token is an "else"
 		if (list[cToken].tokenType == 33) {
 			cToken++;
-			// save the current code index for JMP !
 			codeIndexForJump = cx;
 			emit("JMP", 7, 0, 0, 0, code);
-			// fix the jpc form earlier | savedCodeIndexForJPC.M = currentCodeIndex !
 			code[codeIndexForCondition].m = cx;
 			genStatement(table, list, code, lex);
-			// fix the jpc from earlier | savedCodeIndexForJMP.M = currentCodeIndex !
 			code[codeIndexForJump].m = cx;
 		// if there is no "else" keyword
 		} else {
-			// fix the jpc from earlier | savedCodeIndexForJPC.M = currentCodeIndex !
 			code[codeIndexForCondition].m = cx;
 		}
 	}
@@ -247,19 +234,18 @@ void genStatement(symbol *table, lexeme *list, instruction *code, int lex)
 	if (list[cToken].tokenType == 32)
 	{
 		cToken++;
-		// tableIndex = getTableIndex(table, list[cToken].lexeme); *not noelle
-		// save the sym tbl ind of the var entry unmarked and closest to the cur lex lvl !
+		// save the sym tbl ind of the var entry unmarked and closest to the cur lex lvl
 		tableIndex = findUnmarked(table, list[cToken].lexeme, lex);
 
 		cToken++;
 		emit("SYS", 9, 0, 0, 2, code);
-		emit("STO", 4, 0, lex - table[tableIndex].level, table[tableIndex].addr, code);
+		emit("STO", 4, 0, lex - table[tableIndex].level, table[tableIndex].addr, code); // STO1
 	}
 	// if token is write
 	if (list[cToken].tokenType == 31)
 	{
 		cToken++;
-		genExpression(table, list, code, 0, lex); // pretty sure reg is supposed to be 0
+		genExpression(table, list, code, 0, lex);
 		emit("WRITE", 9, 0, 0, 1, code);
 	}
 }
@@ -413,7 +399,7 @@ void genFactor(symbol *table, lexeme *list, instruction *code, int reg, int lex)
 		// save the symbol table index *old
 		// tableIndex = getTableIndex(table, list[cToken].lexeme); *old
 
-		// save the sym tbl ind of the var/const entry unmark and closest in lex lexlevel !
+		// save the sym tbl ind of the var/const entry unmark and closest in lex lvl
 		tableIndex = findUnmarked(table, list[cToken].lexeme, lex);
 
 		// if the token is a const

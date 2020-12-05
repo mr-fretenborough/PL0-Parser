@@ -76,7 +76,7 @@ int main(int argc, char **argv)
 	if (lFlag)
 	{
 		printLexemeList(list, lexemeListSize);
-		printSymbols(list, lexemeListSize);
+		// printSymbols(list, lexemeListSize);
 		printLexemeTable(list, lexemeListSize);
 		printf("\n");
 	}
@@ -93,8 +93,6 @@ int main(int argc, char **argv)
 		printf("Assembly Code ::\n");
 		printAssembly(code, codeLength);
 	}
-
-	
 
 	// check to see if the user wants to print the assembly execution
 	if (vFlag)
